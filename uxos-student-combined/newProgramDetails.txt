@@ -1,0 +1,202 @@
+1. StartEndDate( products,validity,programId,productInfoValidity,premiumAccount,skuName,bhlpCourseDetails,orderId,)
+    1. startDate= "", endDate =  "2023-05-31" (This should be updated every year so we need to change the year dynamically)
+    2.  let usPrgId = ["OSMOK3AS2001", "EPICK3AS2001", "BMATK3SY2001", "TYJRK3AS2001", "TYULUCAS2001"];
+    3. const newProductsArray = products.filter((ele) => ele.programId === programId && ele.validity === validity);// we will find whther the products list is having the same programId, validity or not and assign it to newProductsArray
+    4. const newProductsLength = newProductsArray.length;
+    5. if there is no programId matches
+        1. with the list then we will be passing the same startDate and endDate
+    6.  if (newProductsLength === 1)
+        1. startDate = moment().format("YYYY-MM-DD");
+        2.  if ([undefined, null, ""].includes(newProductsArray[0].validity)) //Basically we are setting the validity if we got the validity from the newProductsArray as empty/ undefined
+            1. if (programId === "OSMOK3AS2001")
+                1. const year = String(productInfoValidity).match(/\d{4}/g);
+                2. if (!isEmpty(year)) endDate = `${year}-06-30`;
+                    1.return { startDate, endDate };
+            2. else
+                    1. const year = String(productInfoValidity).match(/\d{4}/g); (first 4 digits in the productInfoValidity)
+                    2. if (!isEmpty(year)) endDate = `${year}-05-31`;
+                    3. startDate = year.includes("2023") ? moment().format("YYYY-MM-DD"): moment(endDate).subtract(1, "year").format("YYYY-MM-DD");// Why this is hardcoded?
+                    4. return { startDate, endDate };
+        3.  if (usPrgId.includes(programId)) line 2
+            1. endDate = moment(`${validity}-06-30`).format("YYYY-MM-DD");
+            2. return { startDate, endDate };
+        4.  if (programId === "TYJRUCAS0001" || programId === "EPICUCAS0001")  (tynker and epic)
+            1.  endDate = moment(`${validity}-05-31`).format("YYYY-MM-DD"); 
+        5. if(programId === "BYHTKXSY0001")
+            1. const homeTuitionStartDate = get(bhlpCourseDetails, `0.startDate`, ""); (useless)
+            2. const nextYear = moment().get("year") + 1;
+            3. const premiumEndDate = `${nextYear}-05-31`;
+            4. endDate = (productInfoValidity) || moment(premiumEndDate).format("YYYY-MM-DD"); 
+                getHomeTutionValidity --> { trial - 15 days, quarterly - 40 days, 1month-40 days}
+            5. startDate = moment().format();
+
+        6. if (productInfoValidity === "TRIAL_PACK" || skuName.includes("BYJU'S Tuition Centre 1 Month"))
+            1. const premiumAccountDetails = await PremiumAccountsCollection.findOne({premium_account_id: premiumAccount,});
+            2. const validFrom = minBy(premiumAccountDetails.addons, (addon) => (!isEmpty(addon.status) && addon.status==="active" ) ? addon.valid_from : null);
+            3. const validTill = maxBy(premiumAccountDetails.addons, (addon) => addon.valid_till);
+            4.  if(isEmpty(validFrom))
+                1. validFrom = premiumAccountDetails?.createdAt || "";
+            5.  startDate = moment(validFrom.valid_from).format("YYYY-MM-DD");
+            6. endDate = moment(validTill.valid_till).format("YYYY-MM-DD");
+
+        7. if(newProductsArray[0].validity.toString().length === 2)
+            1. newProductsArray[0].validity = `${newProductsArray[0].validity} Days`;
+        8. if (String(newProductsArray[0].validity).includes("Days")) [In 7,8,9 conditions the validity is based on the no.of days of validity in the newProductsArray]
+            1. const validtillDate = newProductsArray[0].validity.match(/\d{2}/g);
+            2. endDate = moment().add(validtillDate, "days").format("YYYY-MM-DD");
+            9. else
+                1. const validFromYear = String(newProductsArray[0].validity).match(/\d{4}/g);
+                2. endDate = `${validFromYear}-05-31`;
+            10. if (["TBDCUCSY0001", "BDLCKXAS0001", "BTODKXSY0001"].includes(programId))
+                1. get the premiumAccountDetails from premiumAccounts Collection
+                2. const type = ["BDLCKXAS0001", "TBDCUCSY0001"].includes(programId) ? "doc_session" : "tod_session";
+                3. const todSession = premiumAccountDetails?.addons?.find((val) => val?.type === type && val?.orderId === orderId) || {};
+                4. startDate = moment(todSession.valid_from).format("YYYY-MM-DD");
+                5. endDate = moment(todSession.valid_till).format("YYYY-MM-DD");
+    7. if (newProductsArray[0].validity === undefined ||newProductsArray[0].validity === null ||newProductsArray[0].validity === "") //
+        1.  const year = String(productInfoValidity).match(/\d{4}/g);
+        2.  startDate = year.includes("2023")? moment().format("YYYY-MM-DD"): moment(endDate).subtract(1, "year").format("YYYY-MM-DD"); 
+        3. return
+    8.   if (newProductsArray[0].validity.toString().length === 2)
+        1.     newProductsArray[0].validity = `${newProductsArray[0].validity} Days`;
+    9. if (String(newProductsArray[0].validity).includes("Days")) 
+        1. const validtillDate = newProductsArray[0].validity.match(/\d{2}/g);
+        2. endDate = moment().add(validtillDate, "days").format("YYYY-MM-DD");
+        3. startDate = moment().format("YYYY-MM-DD");
+        4.     return { startDate, endDate };
+    10.   let validFromYear = String(newProductsArray[0].validity).match(/\d{4}/g) || "2023";
+    11.   endDate = `${validFromYear}-05-31`;
+    12.  startDate = String(newProductsArray[0].validity).includes("2023") ? moment().format("YYYY-MM-DD"): moment(endDate).subtract(1, "year").format("YYYY-MM-DD");
+    13.  validFromYear = String(newProductsArray[newProductsLength - 1].validity).match(/\d{4}/g) || "2023";
+    14.  endDate = `${validFromYear}-05-31`; (Here the endDate is bit doubtful why the endDate is calculated twice)?
+
+2. ProgramType
+    1.   const { orderPunchingType = "", orderPunchingCategory = "", orgFormattedName = "" } = fullDocument;
+    2.  const courseType = get(fullDocument, `customerDetails.${customerIdx}.hlpDetails.courseDetails.0.course_type`, "");
+    3. const initialClass = get(fullDocument, `customerDetails.${customerIdx}.hlpDetails.initialClass`, "");
+    4. const productType = get(fullDocument, `customerDetails.${customerIdx}.bhlpCourseDetails.0.productType`, "");
+    5. const { subCourse, productLearningType = "" } = get(fullDocument, `customerDetails.${customerIdx}.productInfo.0`, {});
+    6. const products = get(fullDocument, `customerDetails.${customerIdx}.products`) || {};
+    7. const programIdx = products.findIndex((program) => program.type === "1:6_byjus_classes");
+    8. const { type = "", scheme = "" } = programIdx !== -1 ? products[programIdx] : {};
+    9.   if (type === "1:6_byjus_classes" && (scheme === "monthly" || scheme === "quarterly"))
+        1. return "Regular";
+    10.   if( subCourse === "1:6"){
+        1. return "Regular";
+    11.   if (get(fullDocument, `customerDetails.${customerIdx}.productInfo.0.validity`, "") === "TRIAL_PACK")
+        1. return "Trial Pack";
+    12. if (get(fullDocument, `customerDetails.${customerIdx}.productInfo.0.validity`, "") === "quarterly_pack")
+        1. return "Trial Quarterly Subscription";
+    13. if (orderPunchingCategory.includes("scholar")) return "Aakash Scholar";
+    14. if (orderPunchingCategory.includes("aakash_neo_classes")) return "Aakash Live";
+    15. if (orderPunchingCategory.includes("achiever")) return "Aakash achiever course";
+    16. if (orderPunchingCategory.includes("dbel_streaming")) return "Streaming";
+    17. if (orderPunchingType === "advance_order" && (courseType === "neo" || orgFormattedName !== "byjus")) ||productLearningType === "advance")
+        1. return "Advanced Admission";
+    18. if(["AAKASH_SD_CARD_PLUS_LIVE", "advance_order", "discounted_order"].includes(orderPunchingType) && orgFormattedName !== "byjus")
+        1. if(subCourse.includes("ACHIEVER"))
+            1. return "Aakash achiever course";
+        2. if (subCourse.includes("ANNUAL"))
+            1.    return "Aakash Live";
+        3. if (subCourse.includes("SCHOLAR")) 
+            1. return "Aakash Scholar";
+        4. if (subCourse.includes("CRASHCOURSE"))
+            1.    return "Crash course";
+    19. if (orgFormattedName !== "byjus" && orderPunchingType === "discounted_order") 
+        1.  return "Discounted Admission";
+    20. if (productLearningType === "jumpstart_admission")
+        1.  return "Jumpstart";
+    21. else if (["13", "14", "12+"].includes(initialClass))
+        1.  return "Crash course";
+    22.  if (productType === "HOME_TUITION_PREMIUM")
+        1. return "PREMIUM"
+    23.  if (productType === "HOME_TUITION_TRAIL")
+        1. return "" (Why?)
+
+    24. return "Regular"
+
+3. ProductType
+    1. productSelectionType (you will get in the customerDetails)
+    2.   const { bfsProductType, bfsSessions } = get(fullDocument, `customerDetails.${customerIdx}.productInfo.0`, {});
+    3.   const paymentDetail = get(fullDocument, "paymentDetails", []);
+    4.  if (productSelectionType === "byjus_math" && ["16"].includes(bfsProductType) && ["1:6"].includes(bfsSessions)) {
+        1. return "Free";
+    5.   if (["EPICUCAS0001", "EPICK3AS2001", "TYJRK3AS2001", "TYULUCAS0001", "TYULUCAS2001"].includes(programId)) {
+        1. return "Free"
+    6.   if (programId === "BCOPKXSY0003" || programId === "BTLAKXAS0001")
+        1.   for (let payment = 0; payment < paymentDetail.length; payment++)
+            1.   const { amount } = paymentDetail[payment];
+            2. if (amount === 1) return "Free";
+
+    7. return "Paid"
+
+4. getMaxValidityOfTynkerProduct
+5. newProgramDetails
+    1. const { orderId, customerDetails = [], orderPunchingType = "", orderPunchingCategory = "" } = fullDocument;
+    2. const { studentName, premiumAccount, products = [], bhlpCourseDetails } = customerDetails[customerIdx];
+    3. We will be getting the paymentType, programType from the functions above like the (getPaymentType, getProgramType)
+    4. {isBfs, usageMode, deviceType, centerId, schoolCategory, bfsBatch, subCourse}= we will get these details from customerDetails
+    5. if (premiumAccountDetails && !isEmpty(premiumAccountDetails.programDetails)) // Here premiumAccountDetails are getting from the Students collection
+        1. programExists = get(premiumAccountDetails, "programDetails", []);
+        2. programDetailsLength = programExists.length;
+    6. createNewProgramObject 
+        1.(here we defined a function which will get
+            1. startEndDate
+            2. getClassRoomFormat
+            3. getNoOfSession
+            4. getTrialProgram
+            5. getProgramDuration
+            6. Based on the program we create a program object
+            7. The programs we are talking here are
+                1. BCRPUCSY0001
+                2. BMATK3SY0001
+                3. BCOPKXSY0002
+                4. Streaming)
+    7. We will filter the tynker products seperately and assign the validityDate, and for remaining products we will create a new list
+    8. We will assign usageModeFromSubType as "streaming" and if the subtype of the product is sdcard or tablet then we will be creating it as "physical product"
+    9.  for (let product = 0; product < productsLength; product++)
+        1. const { programId = "", validity = "", skuName = "", subType = "" } = filteredProducts[product];
+        2. if (hardwarePrograms.includes(programId) // For hardWarePrograms, programId does not exist in the list, registration subtype then we will skip the cases
+            1. skip
+        3. else if (programMap[programId] === undefined)
+            1. skip
+        4.  else if (subType === "registration") 
+            1. skip
+
+
+        5. if(!isEmpty(programExists))
+            1.  const index = programExists.findIndex((idx) => idx.programId === programId)
+            2. if(index!=-1)
+                1. if (programId === "BCRPUCSY0001")
+                    1. programExists[index].centreId = centreId;
+                2. if (programId === "BMATK3SY0001")
+                    1.if (["bfsPremium", "bfsSubscription", "16", "24", "64", "30", "80"].includes(isBfs)) 
+                        1. programExists[index].deviceType = deviceType;
+                        2. programExists[index].usageMode = usageMode;
+                3. if (isBfs === "16")
+                    1. programExists[index].trialType = "Yes";
+                4. if (orderPunchingType === "UPGRADE" && (!isEmpty(isBfs) || !isEmpty(bfsBatch)))
+                    1. programExists[index].trialType = "No";
+                5. if (orderPunchingCategory === "belp" || orderPunchingCategory === "belp_byjus_math")
+                    1.   programExists[index].isBundleProgram = true;
+                6. if (programId === "BCOPKXSY0002")
+                    1. let preferenceStatus = (await getEligibilityStatus(premiumAccount)) || ""; // we will get the eligibility status by calling the grade switch api
+                    2.  if (preferenceStatus === "eligible") 
+                        1. preferenceStatus = "Eligible";
+                    3. else if (preferenceStatus === "eligible_and_attempted") 
+                        1. preferenceStatus = "Preference collected";
+                    4. else
+                        1. preferenceStatus = "";
+                7. let count = 0;
+                8. let count2 = 0;
+                9. const indiaProgramIds = ["DBELK3AS0001", "TYULUCAS0001", "TYJRUCAS0001", "EPICUCAS0001"];
+                10. const usProgramIds = ["TYULUCAS2001", "TYJRUCAS2001", "EPICUCAS2001", "DBELK3AS2001"];
+
+
+            3. else
+                1.create a newProgramObject using the createNewPrgoramObject function as discussed above
+        6. else
+            1. create a newProgramObject using the createNewPrgoramObject function as discussed above
+
+        //programExists which is the final output will be having 
+        {programName, orderId, programStatus, paymentType, productType, programType, startAt, endAt,classRoomFormat, noOfSession, isTrialProgram, programDuration, usageMode, 'subCourse', 'parentBundleProgramID','isBundleProgram','trialType','deviceType','usageMode','centreId'}
