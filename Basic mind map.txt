@@ -10,6 +10,10 @@ The no.of repos we own:
 	7. uxos-student-core-worker
 
 
+The kafka consumer names we use:
+1. crmStudentsConsumerGroup (dev)
+2. studentAccount (prod)
+3. 
 
 The basic function of each repo:
 	1. uxos-crm-student-accounts-consumer:
