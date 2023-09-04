@@ -1,0 +1,352 @@
+The files I did the understanding are:
+1. Index
+2. consumer
+3. processor
+  1. updateOrderStatusHandler (handler/updateOrderStatusHandler)
+  2. updatePaymentDetailshandler (handler/updatePaymentDetailshandler)
+  3. updateCashBackHandler (handler/updateCashBackHandler)
+  4. createStudentOrderHandler (handler/createStudentOrderHandler)
+    1. getAkashStudentDetails
+    2. studentDetails (helper/StudentDetails.js)
+      1. newProgramDetails
+      2. byjusConfig
+      3. orderDetails
+      4. classRoomDetails
+      5. paymentDetails
+      6. salesforceBoard
+      7. courseAndSessionDetails
+      8. competitiveProgramDetails
+
+
+files not being used:
+1. createCrmOrdersHandler (initialised in createStudentOrderHandler but not being used)
+
+
+handler
+1.handler/createStudenthandler 
+  1. createStudentsHandler(fullDocument)
+    1. const { orderId, customerDetails = [], orderPunchingType = "" } = fullDocument;
+    2. const studentType = customerCount > 1 ? "sibling" : "primary";
+    3. const isAkashOrder = orderPunchingType === "AAKASH_CRP_ORDER";
+    4. for (let customerIdx = 0; customerIdx < customerCount; customerIdx++)
+      1.  if (isAkashOrder) 
+        1. crmStudent = await getAakashStudentDetails(fullDocument, customerIdx);
+      2. else
+        1.  crmStudent = await studentDetails(fullDocument, customerIdx);
+    5.const { premiumAccount } = crmStudent || {};
+    6. if(premium Account is not  present ) 
+      1. return error as premium Id is not generated yet
+    7.let siblingPremiumAccounts = customerDetails.map((crmSt) => {
+        if (crmSt.premiumAccount !== premiumAccount) return crmSt.premiumAccount;
+        return "";
+      }); //Getting the list of sibilingPremiumAccounts
+    8. If the premiumAccount is present then we will update the StudentsCollection with the crmStudent which was created
+
+
+2. 
+
+helper
+
+1. helper/StudentDetails
+  [getProgramDetails,  bepCategories, bepMonthCategories, SOURCE ,getCompetitiveProgramDetails, getOrderDetails, getClassRoomDetails, getPaymentDetails, getSalesforceBoard, getCourseAndSessionDetails, getCurrentClass, getLeadUrl, callLeadApi, dateComparison, getHomeTuitionValidity]
+  
+  1.getMaxValidityCompetitive: (fullDocument,customerIdx) [sku, validity,validityMonth, sku[ias,gate,cat, bepCategories]]
+    1. maxValidityDate = "2023-05-31";
+    2. products= fullDocument->customerDetails[]->products
+    3. if(product ==tynker)
+      1. Dont consider that product
+    4. filteredProducts --> doesnot contain tynker products
+    5. for(product-->filteredProducts)
+      0.let programProduct = filteredProducts[product];
+      1. get {programid, skuName, subtype}
+      2. if(subType== "registration") "we will skip as the registration charges is one time and do not involve expiry"
+      3. we will get the createdAt date from the payload and store it in createdTimeStamp
+      4. endDate = "2024-05-31"; //need to change to dynamic value
+      5. if(orderPunchingType=="ias_")
+        1. 
+      6. get {category, validity, validityMonth, type, sku } = programProduct
+      7. we will get the month from the createdTimeStamp and store it in orderPunchingMonth
+      8. if(orderPunchingMonth<5)
+        1. validityString = moment().get("year") + 1;
+      9.else
+        1.validityString = moment().get("year") + 2;
+      10. const validityExists = sku.match(/\d{4}/g);
+      11. if(validityExists)
+        1. [validityString] = validityExists;
+      12. let expiryMonth = "05";let date = "31";
+      13. if(sku has ias)
+        1. expiryMonth = "12"
+      14. if(sku has gate)
+        1. expiryMonth = "06"
+        2. expiryDate = "30"
+      15. if(sku has cat)
+        1. expiryMonth = "03"
+      16. if(sku has month, day)
+        1. numberOfDaysToAdd = 40
+        2. if(skuMatch(3 Month))
+          1. numberOfDaysToAdd = 90
+        3. if(skuMatch(Day))
+          1. numberOfDaysToAdd = 11
+        4. endDate = moment().add(numberOfDaysToAdd)
+      17. if(bepCategories include type[came from programProduct])
+        1. if(bepMonthCategories include type)
+          1. endDate  = validityMonth ? moment().add(Number(validityMonth) * 30 + 10, "days") : endDate;
+        1. else
+          1.  endDate =validity && validityMonth ? moment(`${validity}-${validityMonth}-01`).add(1, "month").subtract(1, "day").format("YYYY-MM-DD"): endDate;
+      18. if(orderPunchingType == "ias_")
+        1. const validityArray = validity?.split(" ");
+        2. if (!isEmpty(validityArray) && validityArray.length > 1 && validityArray[1]) 
+          1.  endDate = moment(`${validityArray[1]}-${moment().month(validityArray[0]).format("M")}-01`).add(1, "month").subtract(1, "day").format("YYYY-MM-DD");
+        3. else
+          1.     if(!isEmpty(programProduct.validity) && !isEmpty(programProduct.validityMonth) 
+            1. endDate = moment(`${programProduct.validity}-${moment().month(programProduct.validityMonth).format("M")}-01`)
+                  .add(1, "month")
+                  .subtract(1, "day")
+                  .format("YYYY-MM-DD");
+      19.    maxValidityDate = await dateComparison(maxValidityDate,endDate);
+
+    6. maxValidityDate = moment(maxValidityDate).format("YYYY-MM-DD"); 
+
+  2.getMaxValidityK3 (fullDocument,validity,initialClass,finalClass,orderPunchingCategory, customerIdx)(Here the validity comes from the products field of the fullDocument)
+    1. const nextYear = moment().year() + 1;
+    2. let maxValidity = `${nextYear}-05-31`;let maxValidityK3 = maxValidity;let presentValidity = validity;
+    3. if(initialClass && initialClass !== "-1" && typeof initialClass == "string")
+      1. initialClass = initialClass.replace(/[^0-9]/g, ""); //we are only allowing string with correct classes
+    4. (typeof finalClass == "string")
+      1. finalClass = finalClass.replace(/[^0-9]/g, "");
+    5. if (isEmpty(initialClass) || validity === "subscription") 
+      1.  maxValidity = `${nextYear}-05-31`;
+    6. else if (validity === "TRIAL_PACK")
+      1.  maxValidity = moment().add(39, "d").format("YYYY-MM-DD");// Add 39 Days
+    7. else if (isEmpty(presentValidity))[if there is no validity in product field then it is a tablet product]
+      1. presentValidity = get(fullDocument, `customerDetails.${customerIdx}.productInfo.0.tablet.validity`, "");
+    8. if (orderPunchingCategory === "home_tuition") 
+      1.maxValidity = getHomeTuitionValidity(presentValidity);
+    9.  if (orderPunchingCategory === "belp_math_us")
+      1.  maxValidity = `${nextYear}-06-30`;
+    10. if (Number.isNaN(toNumber(presentValidity)) && presentValidity !== undefined)
+      1.  presentValidity = presentValidity.replace(/[^0-9]/g, "");
+    11. let validityYear = 0;
+    12.  if (finalClass)
+      1. validityYear = toNumber(presentValidity) + (toNumber(finalClass) - toNumber(initialClass));
+    13. else
+      1. validityYear = toNumber(presentValidity);
+    14.if (validityYear > 0 && orderPunchingCategory !== "home_tuition")
+      1. maxValidity = `${validityYear}-05-31`;
+    15. if (orderPunchingCategory === "byjus_classes_tod") 
+      1. presentValidity = get(fullDocument, `customerDetails.${customerIdx}.products.0.validityMonth`, "");
+      2. maxValidity = moment().add(+presentValidity, "M").format("YYYY-MM-DD");
+    16. if (!isEmpty(orderPunchingCategory) && orderPunchingCategory === "mlp")
+      1. maxValidity = moment().add(11, "d").format("YYYY-MM-DD");
+    17. maxValidity = moment(maxValidity).format("YYYY-MM-DD");
+    18. maxValidityK3 = moment(maxValidity).format("YYYY-MM-DD");
+    19. return {maxValidity, maxValidityK3}
+
+
+  3.getStatusFromSf(premiumAccount)
+    1. const getSfAccountStatus = await global.sfClient.getSfAccountDetails(premiumAccount);
+    2. return getSfAccountStatus;
+
+  4.  getCashbackDetails(cashbackDetails) {this cashback details comes form the fullDocument}
+    1. Based on the cashbackDetails we get we decide the amount to salesPerson and customer
+
+  5. getSalesforceOrderType(orderDetails, customerIdx)
+      1. const { source, orderValue } = orderDetails;
+      2. let sfOrderType = "fresh_order";
+      3. source= "byjus_website" || customerDetails.productInfo.0.validity.orderDetails == "TRIAL_PACK" || TRIAL_SUBSCRIPTION
+          1. let sfOrderType = "trial_order";
+      4. !isEmpty(orderDetails.originalOrderId
+          1.  sfOrderType = "converted_order";
+      5. orderValue === 1 
+          1. sfOrderType = "FOC order";
+      6. const mqMessage = get(orderDetails, "mqMessage", {});
+      7. const loggedInEmailId = get(mqMessage, "loggedInEmailId", "");
+      8.  if (!isEmpty(loggedInEmailId))
+          1.  const ueEmployeeData = await UmsUeEmployeesCollection.findOne({})
+          2.  if (!isEmpty(ueEmployeeData))
+              1. const { subDepartment } = ueEmployeeData;
+              2. if (subDepartment === "renewal") sfOrderType = "renewal_order";
+              3. if (subDepartment === "retention") sfOrderType = "retention_order";
+      9. return sfOrderType
+
+  6. getLeadCategory(premiumAccountDetails, currentPaymentDetails, leadCategoryFromSf)
+    1. This will say whether the lead belongs to EMI or NON-EMI
+  
+  7. getFocBypass (premiumAccountDetails, orderValue)
+    1. let focBypass = false;
+    2. if (isEmpty(premiumAccountDetails) && orderValue === 1)
+        1.  focBypass = true;
+    3.  else if (orderValue !== 1) 
+        1.  return focBypass;
+    4. else if (!isEmpty(premiumAccountDetails))
+        1. TRAVERSE THE ENTIRE ORDER LIST AND check if any of the order is focByPass
+  8. getStudentDetails (fullDocument, customerIdx)
+    1. {orderId,customerDetails=[],cashbackDetails={},orderValue,createdAt,customerId="",direct_sales_appointment_by="",orderPunchedBy,
+        direct_sales_appointment_by_id:directSalesAppointedById,premiumAccountGenerated,postSalesLeadDetails=[],orgFormattedName,orderPunchingType,sourceDetails={},source,case,sales_person_id,sales_person_email,paymentDetails=[]}=fullDocument
+    2.{studentName,studentMobile,parentName,parentMobile,productInfo,parentEmail,studentProfileDetails,city,zipCode,country,studentEmail,bhlpDetails={},productSelectionType,academicDetails={},deviceType="",featureTag,addressDetails={},} =studentDetails from fullDocument
+    3. bhlpCourseDetails.forEach((el) => { batchId = get(el, "batchId", "");});
+    4. let { premiumAccount, address, state } = studentDetails;
+    5. if (orderId.includes("SS"))
+      1. change SSO order to SO order
+      2. now check the SO order in the OmsSalesOrdersCollection using the SO order Id
+      3. if(Data is not empty)
+        1. get omsSalesOrderData, contactDetails, leadContact
+    6. if(blhpCourseDetails.include(null)) 
+      1. bhlpCourseDetails = []
+    7. traverse in the "bhlpCourseDetails" and get the mandatorySessionCounts value
+    8. get the Address --> address =address(0,254)
+    9. if (country === "India") 
+      1.set the state using our declared statelist so there will uniformity
+    10. else
+      1. state = country
+    11. if(!premiumAccount)
+      1. get PremiumId from studentProfileDetails from studentDetails
+    12. if (!premiumAccount)
+      1. get PremiumId from the premiumAccounts collection using the orderId
+    13. premiumAccountDetails = await StudentsCollection.findOne({ premiumAccount });
+    14. const recordFromSf = await getStatusFromSf(premiumAccount)
+    15. if(recordFromSf is not empty)
+      1. leadCategoryFromSf = recordFromSf.Lead_Category__c || "";
+      2.  expiryDateFromSF = recordFromSf.Expiry_date__c || "";
+      3. currentClassFromSF = recordFromSf.Current_Class__c || "";
+    16. { course, courseType = [], validity, initialClass, finalClass }=product (from fullDocument)
+    17. Stringify courseType array using join
+    18. {orderPunchingCategory, studentFirstName, studentLastName, communicationPreferences, whatsAppStatus, languagePreference, region}
+    19. if region is empty based on the Country we need to set the region
+    20. if language is empty based on the stateLanguage List we need to set the language
+     //setting the maxValidity
+    22. if(competitiveProducts.include(courseType))
+      1. we need to get the maxValidity by using the getMaxValdityCompetitive function to get the date
+    23. else
+      1. we need to get the maxValidity by using the getMaxValdityK3 function to get the date 
+    24. set the mobile number of the student as whiteHatMobile
+    25. set the following
+      1. TLLMS_URL
+      2. sfOrderType = await getSalesforceOrderType(fullDocument, customerIdx);
+      3. createdTimestamp = use createdAt timeStamp value
+      4. sfBoard = getSalesforceBoard(product, state)
+      5. isFOC = getFocBypass(premiumAccountDetails, orderValue)
+
+    26. const { orderDetails, childOrderId } = await (imported function)getOrderDetails(fullDocument, sfOrderType, isFOC, maxValidity,  maxValidityK3, customerIdx,)
+    27. isBfs (Byjus Future School ) --> We will be getting from fullDocument.customerDetails[0].productInfo.0.bfsProductType
+    28. whiteHatUrl = isBfs ? WHITE_HAT_URL + toString(whiteHatMobile) : "";
+    29. { paymentDetailsObj, loanDetail } = (imported function) getPaymentDetails( fullDocument,childOrderId,productSelectionType,course, customerIdx,)
+    30. if(competetiveProducts.include(courseType))
+      1. programDetail = await getCompetitiveProgramDetails(fullDocument, customerIdx, paymentDetailsObj, premiumAccountDetails)
+    31.else
+      1. programDetail = await getProgramDetails(fullDocument, customerIdx, paymentDetailsObj, premiumAccountDetails)
+
+      //section to get the sales person details and addons
+    32. orderhiveSalesPeopleData = await OrderhiveSalesPeopleCollection.find( userId: directSalesAppointedById,)
+    33. premiumAccountData = await PremiumAccountsCollection.findOne({ premium_account_id: premiumAccount },{ "post_sales_lead_details.id": 1, addons: 1, student_details: 1 },)
+    34.const { addons = [], student_details: studentDetail = {} } = premiumAccountData || {};
+    35.  const { school_details } = studentDetail;
+    36. if (!isEmpty(school_details))
+      1. if (school_details[0].schoolState == "Puducherry")
+        1.school_details[0].schoolState = "Pondicherry (PY)";
+      2. else
+        1. set the state of school using the stateList we have to make things uniform
+    37. {validFrom, proficiency} = last(addOns)
+    38. const employeesData = await EmployeesCollection.findOne({ email: username });
+    39. let { doj = "1970-01-01", role = "" } = employeesData || {};
+    40. const orderPunchedByEmployeeData = await EmployeesCollection.findOne({ email: orderPunchedBy });
+    41. const { subDepartment = "", unit = "" } = orderPunchedByEmployeeData || {};
+    42. const orderPunchedByRole = get(orderPunchedByEmployeeData, "role", ""); 
+    43.   const currentDate = new Date();
+    44. const diffTime = currentDate - doj;
+    45. const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    46. setting the role by using the date of joining
+        1. if([bda,bdat] && diffDays>365 ) 
+          1.role= "senior_bda"
+        2. else if(role == "bdt")
+          1. bdtWeek = diffDays/7
+      // end of sales section
+
+      //Set orderDetails and paymentDetails
+    47. if (!isEmpty(premiumAccountDetails) && isBfs != "bfsSubscription")
+        1. orderAlreadyExists = premiumAccountDetails.orderDetails.find((order) => order.orderId === orderId)
+        2. if (!orderAlreadyExists)
+          1. finalOrderDetails = [...premiumAccountDetails.orderDetails, ...orderDetails];
+        3. else 
+          1. finalOrderDetails = [...premiumAccountDetails.orderDetails];
+        4. let paymentAlreadyExists = false;
+        5. if (orderId.includes("SO"))
+          1.  paymentAlreadyExists = premiumAccountDetails.paymentDetails.find((payment) =>payment.orderId.includes(orderId.split("-")[1]),
+        6. else
+          1. paymentAlreadyExists = premiumAccountDetails.paymentDetails.find((payment) => payment.orderId === orderId);
+        7. if(!paymentAlreadyExists)
+          1. finalPaymentDetails = [...premiumAccountDetails.paymentDetails, ...paymentDetailsObj];[paymentDetailsObj is the value from the orderDetails]
+        8. else
+          1.   finalPaymentDetails = [...premiumAccountDetails.paymentDetails];
+    48. else
+        1.  finalOrderDetails = [...orderDetails];  finalPaymentDetails = [...paymentDetailsObj];
+    49. const orderStatusToIgnore = ["canceled", "returned", "cancelled"];
+    50. const filteredOrderDetails = filter(finalOrderDetails, (item) => !orderStatusToIgnore.includes(item.orderStatus));
+    51. let getMaxValidity = maxBy(filteredOrderDetails, "maxValidity"); //Basic ga manam calculate chesina maxValdity ni getOrderDetails params kindha pampithe manaki vachina output lo orderDetails and filteredOrderDetails
+    52. if (expiryDateFromSF && getMaxValidity?.maxValidity)
+        1.  getMaxValidity = await dateComparison(getMaxValidity.maxValidity, expiryDateFromSF);
+    53.  maxValidity = getMaxValidity ? getMaxValidity.maxValidity : "";
+    54. if (!isEmpty(loanDetail))
+      1. loanDetail = { ...loanDetail, parentEmail };
+    55. const courseAndSessionDetails = await (import function) getCourseAndSessionDetails()
+    56. const cashbackDetail = await (import function) getCashbackDetails(cashbackDetails);
+    57.  const classRoomDetails =  (import function) getClassRoomDetails(fullDocument, customerIdx);
+    58. finally create a payload for the crmStudent
+    59. if (courseAndSessionDetails?.bhlpType === "Neo Classes") 
+        1. crmStudent.marksStatus = "Unverified";
+    60. if (courseType.includes("K10")) 
+        2. crmStudent.deviceType = deviceType;
+    61. there are some conditions which are simple and direct
+
+
+
+helper/CommonHelpers
+
+1. orderDetails (fullDocument, sfOrderType, isFOC, maxValidity, maxValidityK3, customerIdx)
+    0. orderDetails = []//this is the one which we will return as the response of the function
+    1. {orderId, customerDetails = []} = fullDocument
+    2. {orderType, responseObject, orderhiveOrderStatus, orderValue, createdAt, lineOrderItems, orderPunchingType, source} = fullDocument;
+    4. {productInfo, productSelectionType} = studentDetails (from fullDocument)
+    5. {course, courseType} = product and stringify the courseType
+    6. {parentOrderItems = [], childOrderItems } = lineOrderItems (it is from fulldocument)
+    7. productNames = parentOrderItems.map((ele)->ele.name)
+    8. createdTimeStamp -> calculated using the createdAt time
+    9. childOrderId = orderId
+    10. childProductNames = childOrderItems.map((ele))
+    11. totalProducts = productNames.concat(childProductNames);
+    12. { shipmentTrackingNumber } = responseObject;
+    13. if (orderId.includes("SS"))
+        1.  const subOrder = orderId.split("-");
+        2. salesOrderId = "SO-".concat(subOrder[1]); //salesOrderId is the SO-ID
+    14. {orderId, courseType, course,productNames, shipmentTrackingNumber, maxValidity, maxValidityK3, orderValue,orderhiveOrderStatus,omsOrderStatus, orderType,orderIdentifier: "SSO",salesOrder, sfOrderType, isFOC, orderPunchingType, productSelectionType, createdAt,updatedAt,ivrFeedback} --> this is the details we fill for the ordersCollection
+    15. if(orderType === "SPLIT_PARENT")
+      1. childOrderData = MiddlewareOrdersCollection.findOne( parentOrderId: orderId,orderType: "SPLIT_CHILD",)
+      2.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

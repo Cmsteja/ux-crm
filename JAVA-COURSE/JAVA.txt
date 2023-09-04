@@ -1,0 +1,552 @@
+1. Day-1
+	1. Understanding of the public static void main(String[] args)
+		 --> Here the main is the function which can get several parameters to be passsed at the call of the function. So to handle any number we created an array of String so any no.of params can be passed
+		 --> Here the void refers that we are not expecting anything in the return
+		 --> Here in Java for any use of methods a class we need to create an object of that class, but the main is the topmost thing we need to call where we cannot create any object so to solve this the static part will be useful. For static methods there is no requirement of the objects to be created for a class to use the methods(functions in java are called as methods))/ of the class
+
+	2. Memory creation of elements and objects declared in Java and more about Constructors (More BOUT CONSTRUCTIRS WILL BE CIVERED IN IINHERITANCE CONCEPTS)
+		1. So when an object was created for a class then the an object will be declared in the heap part of the CPU
+		2. Each class has an constructor, constructor does not have any return value. There is always a default constructor in java even though we do not define it.
+		3. The constructor will have the same name as the class name
+		4. Every time if you want to create the object, new function will communicate with JVM that I want to create an object. The amount of space will be given by the constructor Cls obj =  new Cls();
+		5. We can define multiple constructors by usind differnt params passing to it. This process is called as "Constructor Overloading"(part of polymorphism)
+
+
+	17. This keyword in Java
+		1. The this keyword helps to represent the current instance so to avoid local field overlapping if the names are the same.
+			class Test{
+				int n1;
+				public Test(int n1){
+					this.n1 = n1; // the instance variable of the class is assigned
+					n1 = n1 // here the local n1 is assigned to local n1
+				}
+			}
+		2. This keyword is helpful if the names of the instance and the local variables are same.
+
+
+	18. method Overloading
+		1.  We can define multiple methods/ constructors by usind differnt params passing to it. 
+
+	19. Understanding static keyword
+		1. The static fields will go to class loader memory
+		2. In static variables are the ones who's value will be same for all the objects of the class
+		3. There is a static method in java there we can assign the values of the static variables or we can assign the variable name in the main class by [Cls.var = "name you want"]
+		4.static block will be executed when the class is loaded
+		5. you cannot access non static variables inside a static method.
+
+	20. Inner Class
+		1. We can create a class inside a class. This classes insid the class are called as Inner classes. The inner classes needs to be created if the inner class works along side with the outer class else you can create a seperate class. Accessing the Inner class [Outer.InnerClass obj2 = obj1.new InnerClass();]
+		2.We can also have a static class. So to access the static class [Outer.InnerClass obj2 = new Outer.InnerClass();] we can directly use the class name to define the constructor
+		3. Inner Class has 3 different types: Member Class, static Class, Anonymous Class
+		4. If the class is declared without a static keyword then it is called as a Member class. If there is a Static keyword then it is called as Static class
+		5. Anonymous class comes in interfaces(****)
+
+	21,22. Arrays, 2d arrays and Jagged Arrays(Array of different sized arrays)
+		1. Syntax to create an array:
+			int nums[] = new int[4]; the size is important
+			int nums[] = {1,23,4,2,4}
+		2. Memory creation of the array occurs in the heap memory part of CPU
+		3. We can create the array of classes
+		4. The way to declare 2D array
+			int d[][]={
+			{8,23,2,2,42},
+			{123,42,4,1,2},
+			{123,42,4,1,2}
+			}
+		5. To get the array lenght in java --> arr.length
+		6. The jagged array declaration --> Just the arrays declared of different sizes
+			int d[][]={
+				{8,23,2,2,42},
+				{123,4,1,2},
+				{123,42,4,1,2}
+			}
+	23. Enhanced for loop
+		1. for an array a we can create an array for loop
+	       for(int k:a){
+	       	System.out.print(k+" ");
+	       }
+	    2. for a 2d array:
+	    	for(int k[]:a){
+	    		for(int l: k){
+	    			System.out.print(l+" ");
+	    		}
+	    	}
+
+	24. Varargs Demo
+		1. The basic idea is if we want to pass multiple elements of unknown count to a method declare in class then we can use "... n" as the parameter in the definition of the method of the class
+		2. The ... n --> Signifies that the n is a array of params which are passed and type of n is array. So accordingly you can write the definition of the method.
+	25. Inheritance
+		1. This inheritance concepts helps us to use the functionality of one class in the other class without rewriting the code again.
+		2. In java the classes are named as --> Super, Sub
+		3. In oops ---> Parent, Child
+		4. In cpp ---> Base, derived
+		5. types of inheritance:
+			1. Single level Inheritance
+			2. Multilevel Inheritance
+			3. Muliple Inheritance (It is not supported in normal classe in java we use interfaces here)
+		6. IS-A --> Inheritance
+		7. we use "extends" keyword
+	26. Super Method
+		1. The constructor of super class will be called when we creted the sub class object.
+		2. however if there are parametrised constructors and default constructors then when an object was created with a parametrized constructore of subclass the the default constructor of the super class will be called and the parametrized constructor of sub class will be called
+		3. If we want to make the paratrized constructor call then we need to use super method and pass a value to that in the sub class constructor call. So it will call the super class parametrized constructor
+
+	27. Multiple inheritance in java
+		1. Java does not support Multiple Inheritance
+		2. The reason why it does not support is because of Ambiguity if the same function exists in two different classes
+		3. This concept multiple inheritance is possible using interfaces in java
+	
+	28. Method Overriding / Super keyword
+		1. child class method will override the parent class method
+		2. It is more better to use annotation @Override to make things noticeable whether the sub class has the same method name present in the super class or not.
+		3. We can use super keyword to call the function with the same name in parent class and avoud the overriding part
+	
+	29. dynamic Method Dispatch
+		1. To achieve dynamic method dispatch we need to follow runtime polymorphism
+		2. if B is sub class of super class A then we can define objects by referencing and creating the constructor B ==> A obj1 = new B() --> This is valid and this obj1 will only have access to common function present 
+		3. Revisit the video to understand again
+
+
+	30. Encapsulation
+		1. The binding of data with methods is called as "Encapsulation"
+		2. The reason to use getters and setter is for data privacy and creation logs in case of accesing the variables
+
+	31. Wrapper Class
+		1. primitive variables, wrapper classes (Integer, Float, Double)
+		2. int = 5 (primitive Data types) 
+		3. Integer ii = new Integer(i) (here Integer is a wrapper class) //boxing
+		4. So to assign ii value to some other variable int j = ii.intValue(); // unboxing
+		5. Integer v = i; // autoboxing
+		6. int j = v //autoUnboxing
+		7. The primitive data types are more efficient in usage than the wrapper classes in declaring the variables
+		8. The reason why we have to learn the wrapper classes is some of the frameworks like hibernet and collection work only with the wrapper classes
+		9. to convert a string to a integer we use parseInt
+			1. But this parseInt works only when we use wrapper class
+			2. String str = "123";
+			3. int i = Integer.parseInt(str);
+
+	32. Abstract keyword
+		1. Abstract class
+			1. The abstract class is used if we dont want to be used for creating objects for that class. The methods of that class will be used in the child classes of this parent class
+			2. we need to declare it as:
+				1. abstract class Human{
+
+					}
+				For the Human class we cannot create the object
+		2. Abstract method
+			1. To just define method without any functionality in it then we need to declare it as abstract.
+				 abstract void test();
+			2. The abstract methods can be defined only in the abstract classes
+			3. we can refer with the parent class and we need to declare teh constructors of the child classes. The child classes are called as concrete classes
+
+
+	33. Why do we need abstract class
+		1. The Integer and Double are subclasses of Number class so if we want to avoid differnt constructors/ methods for int seperately and double seperately we can just declare the param as Number.
+		2. Need to understand the use of abstract method.
+
+	34. Final Key word:
+		1. If you make a variable final then it works similar to a constant we cannot change the value of it.
+		2. If you make a class final then no other class can extend your final class
+		3. If you make a method final no one can override your method
+	35. Interface why and what?
+		1. Interfaces are used to solve teh multiple inheritances
+		2. We need to implements the Interfacess
+		3. We can only define methods in an Interface.
+		4. we can create reference of Interface but we cannot create object of interface
+		5. The main differences between Interface and the abstract are:
+			1. All the methods in the interface are public abstract type
+			2. we can do implement multiple inheritance using the Interfaces
+
+	36. More about Interface
+		1.
+
+	37. Anonymous class
+		1. So if we want to override a method of a class then we can create another subclass makeing the class we have as super class and we can override the function
+		2. but here we are uselessly creating a seperate named class instead we can create the class while creating the object itself
+			1. A obj1 = new A({
+				public void show(){
+					System.out.println("I'm the best");
+				}
+			})
+			2. So this will work for that object only
+
+	38. Anonymous class with interface
+		1. Similar to above.
+		2. This anonymous class helps us to use the memory efficiently as we are not preloading the class file. If we dont need to reuse the definition of the class then it is better to use the anonymous classes
+
+Day-2
+	39. Functional Interface | Lambda Expression
+		1. Types of Interfaces:
+			1. Normal ( In this interface more than one method is listed)
+			2. Single Abstract method (In this interface only one abstract method is listed) (Function interface --> Lambda expression)
+			3. Marker Interface (In this no method is listed)
+		2. Single Abstract (Functional Interface)
+			1. It is better to use @FunctionalInterface annotation just to avoid mistakes
+			2. Abc obj1 = () -> {//definition of the code}
+			3. Here we can use the above lambdda expression only for functional interface
+			4. The Abc is a interface which is a functional interface type
+			5. Functional interface works after JAVA 1.8
+
+	40. Default methods in Interface
+		1. After JAVA 1.8  the abstract and interface became almost similar except that the multiple inheritance is not possible in abstract classes
+		2. We can now define non abstract type methods as well in interfaces
+		3. we need to used 'default' keyword to create a definition of a method in interface
+
+
+	41. Multiple inheritance issue in updated interface
+		1. So basically as the interface was updated we can get isssues if we defined same method in multiple interfaces, which causes ambiguity
+		2. To avoid it we need to create the same class in the existing class and call the method in the interface we want using the super keyword
+			interface.super.commonMethod();
+
+	42. Static method in Interface
+		1. Elements in interface becomes a final 
+		2. If we want to call a function in interface without implementing in any class we can use static methods
+
+	43. Package
+		1. for all input output operations we have .io package
+		2. For all networking operations we have .net package
+		3. for all db related operations we have .db package
+		4. Similarly we can create our own packages with different names
+
+	44. access modifiers
+		1. Types of access modifiers:
+			1. Final
+			2. Abstract
+			3. Public
+			4. Private
+			5. protected
+			6. default
+
+		2. We cannot use private and protected with class
+		3. 	Access of types of methods/ variables
+			1. Private - accessible inside the specific class
+			2. Default - accessible inside the specific package
+			3. Public - any class or package
+			4. Protected - Subsiding Class
+		4. WE can only import public classes of a package we cannot import final or abstract type classes from one file to other file
+		5. The classes can have  1. Public, 2. Final 3. Abstract type of access modifiers
+		6. What is the difference between the default and the protected
+			1. The variables which are protected can be referred while in the child class directly but not the default ones. The sub class should be defined outside the package folder where the parent class defined
+
+	45. Exception Handling try catch finally
+		1. Using try catch mechanism which is similar to js
+		2. If it is an arithmetic exception then we can denote the param as ArithmeticException e
+		3. try{
+
+			} catch(ArithmeticException e){
+
+			} finally {
+			// this block executes in both the try situation and catch situation and helps us to reduce the redundancy in the code
+			}
+		4. Most often finally block is used for closing the variables to avoid memory wastage
+	
+	46. Multiple catch blocks
+		try{
+
+		}catch(condition1 | condition2 | condition3 ...){
+
+		}finally{
+
+		}
+
+		or 
+
+		try{
+
+		}catch(){
+
+		}catch(){
+
+		} finally{
+
+		}
+
+	47. Checked Exception | Finally block
+		1. we can use `throws Exception` after the method
+		2. eg:
+		     class Test{
+		     	public static void main(String[] args) throws Exception{
+		     	// no need to use catch blocks here it will automatically handled
+		     	}
+		     }
+
+	48. try with resources
+		1. In latest java version
+			try(Buffered br = new Buffere(read input)){
+				//input value;
+			}
+
+		2. Here the br will be automatically closed. There is no requirement of creating a finally block again
+
+	49. User defined Exception
+		1. So if we want to create our own exception type then we need to create a class with the new exception we want and the inherit the properties of Exception class
+		2. So to pass the message we want to display we need to use: super(string)--> this will set the error message
+
+	50. UserInput using scanner
+		1. we need to use scanner package instead of using buffered package for getting the inputs
+		2.  Scanner sc = new Scanner(System.in)
+		3. int val = sc.nextInt();
+		4. float val2 = sc.nextFloat(); --> Similarly there are nextLong, nextDouble etc
+
+	51. Multi Threading in Java theory
+		1. What is thread?
+			 It is a unit of a process.
+		2. Use of threads
+			1. by default main is a thread which is present in every code
+			2. So the main use of threads is to reduce the time of execution of a process. The main thread will call multiple sub threads to do a parallel tasks using different cores of the CPU
+			3. Asynctask in Android
+				1. 
+			4. Web Application
+				1. Multiple threads are created in Servlet to process the requests of multiple users
+			5. Game development requires a lot of threads
+
+		3. Ways of creating thread in Java
+			1.  We can use the create a thread class and extend it to base thread class which was main
+				1. class MyThread extends Thread{
+			
+					}
+			2.  We can implement runnable interface just to have an option to extend some other class
+				1. class MyThread  extends otherClass implements Thread{
+			
+					} 
+
+			Thread thread1 = new MyThread();
+			thread1.start(); (Better use it instead of using thread1.run() as we need to run multiple threads parallely)
+
+	52. Multi thread class
+		1. Did 
+			class Hi extends Thread {
+			    public void run() {
+			        for (int i = 0; i < 5; i++) {
+			            System.out.println("Hi");
+			            try {
+			                Thread.sleep(1000);
+			            } catch (Exception e) {
+			                // TODO: handle exception
+			            }
+			        }
+			    }
+			}
+
+			class Hello extends Thread {
+			    public void run() {
+			        for (int i = 0; i < 5; i++) {
+			            System.out.println("Hello");
+			            try {
+			                Thread.sleep(1000);
+			            } catch (Exception e) {
+			                // TODO: handle exception
+			            }
+			        }
+			    }
+			}
+
+			public class MainThread {
+			    public static void main(String[] args) {
+			        Thread obj1 = new Hi();
+			        Thread obj2 = new Hello();
+			        obj1.start();
+			        try {
+			            Thread.sleep(10);// this will help us to make the methods to execute in correct order and there
+			                             // is no overlap of requests
+			                             
+			        } catch (Exception e) {
+			            // TODO: handle exception
+			        }
+			        obj2.start();
+			    }
+			}
+	53. Multi thread class using interface
+			class Hi implements Runnable {
+			    public void run() {
+			        for (int i = 0; i < 5; i++) {
+			            System.out.println("Hi");
+			            try {
+			                Thread.sleep(1000);
+			            } catch (Exception e) {
+			                // TODO: handle exception
+			            }
+			        }
+			    }
+			}
+
+			class Hello implements Runnable {
+			    public void run() {
+			        for (int i = 0; i < 5; i++) {
+			            System.out.println("Hello");
+			            try {
+			                Thread.sleep(1000);
+			            } catch (Exception e) {
+			                // TODO: handle exception
+			            }
+			        }
+			    }
+			}
+
+			public class MainThread {
+			    public static void main(String[] args) {
+			    	Runnable obj1 = new Hi();
+			    	Runnable obj2 = new Hello();
+			        Thread t1 = new Thread(obj1);
+			        Thread t2 = new Thread(obj2);// Basically we could have used the direct class but the problem with this is that there is only one function run. This will cause issues as the run function is already defined above
+
+			        obj1.start();
+			        try {
+			            Thread.sleep(10);// this will help us to make the methods to execute in correct order and there
+			                             // is no overlap of requests
+			                             
+			        } catch (Exception e) {
+			            // TODO: handle exception
+			        }
+			        obj2.start();
+			    }
+			}
+Day-3
+
+	55. Lambda expression
+		In the above class code instead of creating seperate classes we can use the lambda expression
+			public class MainThread {
+			    public static void main(String[] args) throws InterruptedException {
+			    	Runnable obj1 = ()->
+				    		public void run() {
+						        for (int i = 0; i < 5; i++) {
+						            System.out.println("Hi");
+						            try {
+						                Thread.sleep(1000);
+						            } catch (Exception e) {
+						                // TODO: handle exception
+						            }
+						        }
+						    };
+			    	Runnable obj2 = () ->
+				    		public void run() {
+						        for (int i = 0; i < 5; i++) {
+						            System.out.println("Hello");
+						            try {
+						                Thread.sleep(1000);
+						            } catch (Exception e) {
+						                // TODO: handle exception
+						            }
+						        }
+						    };
+			        Thread t1 = new Thread(obj1);
+			        Thread t2 = new Thread(obj2);// Basically we could have used the direct class but the problem with this is that there is only one function run. This will cause issues as the run function is already defined above
+
+			        obj1.start();
+			        try {
+			            Thread.sleep(10);// this will help us to make the methods to execute in correct order and there
+			                             // is no overlap of requests
+			                             
+			        } catch (Exception e) {
+			            // TODO: handle exception
+			        }
+			        obj2.start();
+
+			        System.out.println(t1.isAlive()); --> this t1.isAlive helps use to know wether the thread t1 is alive or not. 
+
+
+					t1.join();// this join helps the mainthread to wait till the threads t1, t2 completed
+			                  // their tasks
+			        t2.join();
+
+
+			        System.out.println("End of the program"); //If the above joins are absend then this statement print before the threads t1, t2 completed
+
+
+			    }
+			}
+
+	56. Thread priority
+		1. Some of the functions the thread has
+			1. t1.getName();
+			2. t1.setName("thread-1");
+			3. t1.getPriority();
+		2. The priority changes from 1 (THREAD.MIN_PRIORITY) to 10(THREAD.MAX_PRIORITY). 1 means least priority and 10 means highest priority.
+
+	57. Synchronized keyword:
+		1. Normally if we are using the same function to update  a variable using two different threads then there should syncronisation while updating
+		2. So in these cases we need to have synchronisation
+		3. To make a method synchronised we need to add a keyword (synchronized) while creating the method
+			eg: public synchronized void func(){
+
+			}
+
+	58. Collections and Generics in Java
+		1. collection -- Topic
+		2. Collection - interface
+		3. Collections --  Class
+		4. Array collection:
+			1. So normally if we have the no.of items fixed then we declare array as:
+				int a[] = new int(4); --> Here the number of elements in the array are 4
+
+			2. however if the size of the list is not constant then we will be using the collection. The following is the declaration of the collection using the Collection:
+				Collection a = new ArrayList(); --> here the elements can be added to this collection list by using a.add(5)
+			3. Interms of efficiency normal array is better. So if the size is fixed better go to the normal array and if not then u go to the Collection
+		5. Generics are used to make the arrays input types in the above def it can add any type of values whether it is String, Intger etc. So if we want to add only Integer then we need to add Generics
+			Collection <Integer> a = new ArrayList<>(); 
+		Just to mention that in the Collection we can just add the elements we cannot use the indexing, so if we want to use the indexing then we need to define it as follows:
+
+			1. List<Integer> a = new ArrayList<>();  Collection-->List--> ArrayList (Here the List is the one subInterface of the interference Collection so to get the index based methods we need to use the List)
+
+			2.If we want avoid the duplicate values:
+				Set<Integer> s = new HashSet<>();
+
+
+			3. If we want the elements in the sorted order:
+				Set<Integer> s = new TreeSet<>();
+			4. Map<Integer, String> m = new HashMap<>()
+			5.  Map<Integer, String> m = new HashTable<>()
+
+	61. generics with String
+
+	62 Collections class
+		1. To sort the elements of an array we can use Collections.sort(array)
+		2. To reverse the elements in the array we can use Collections.reverse(array)
+
+	63. Comparator Interface
+		1. Override the Comparator interface method by using anonymous function
+		2. Comparator <Integer> i = (Integer i, Integer j)->{
+
+			}
+		3. lambda expression can be used only for functional Interfaces
+	
+
+
+	65. Set Interface
+		1. HashSet will not store the elements in the order we added 
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,89 @@
+1. What is Spring?
+	1. Basically Spring is the ultimate framework which we use.
+	2. The Spring Boot is something it will help us reducing the effort required.
+	3. Deployment of a web application involves
+		1. hardware of server
+		2. Linux OS
+		3. TomCat software
+		4. war file of the application is deployed
+	4. The spring boot automatically creaetes  a war file with TomCat within it. So we can run the file within the JVM itself no need of effort in deployment
+	5. The important usecases of spring boot are:
+		1. Spring provides starter packs for creating applications:
+			1. spring-boot-starter-web: Web Application
+			2. spring-boot-started-jdbc
+			3. spring-boot-auto-configuration which does the configuration automatically
+			application.properties(file)
+2. Dependency Injection
+	1. It is a design pattern for developing advanced applications
+	2. Loose Coupling we need to achieve
+	3. Dependency Injection containers in Spring
+	4. @Component notation makes a class a component of spring framework
+	5. @Autowired notation at the creation of object
+
+3. Spring Boot suite, IDE
+	1. We can use vs code, sts or intellij(paid) all works the same
+	2. The 
+
+4. Spring Autowire dependency injection spring boot
+	1. SO firstly we need to create a basic spring boot starter application.
+	2. in that we can create multiple classes and to connect these classes to spring container we need to create beans
+	3. The beans can be created by using the annotation @Component
+	4. We can also name the bean by using the annotation @Component("Name of bean you want"). This name will be useful to identify the bean while autowiring
+	5. Now in the main class we need to create a context or the variable that points to the spring container. And after getting the pointer to that we can use the method context.getBean(Class Alien). The class we want.
+	6. so this is how we can create a dependency injection of the class using the spring boot
+	7. Normally by default this object will be loaded even thought we did not call the class. So to avoid it we need to use the annotation @Scope(value = "prototype").
+	8. This value helps us to create the object of the class whenever it was called. But the problem here is everytime the call happens new object will be created
+	9. So we our class Y depends on some other X, then we need to create a bean for the class X in the spring container(tihis can be done using the annotation @Component). After creating the bean we need to say class Y that a bean was created for class X (this can be done using the annotation @Autowired). To make the identification possible with names we need to use the annotation @Qualifier("bean name")
+
+5. Web App Using Spring Boot
+	1. So firstly we need to create a spring web application
+	2. After that we need to create a web page file in jsp format
+	3. Later we need to set the cofigurations related to the page folders by creating the response we need to send for the path they have requested us
+	4. In this section they talked about the frontend part of the web page creation only by sayig how to create controllers
+	5. The annotations they used are:
+		1. @RequstMapping
+		2. @ResponseBody
+		3. @Controller
+	6. The newpages which we create needs to be inside src/webapp folder. The spring boot default configuration searches there only.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
