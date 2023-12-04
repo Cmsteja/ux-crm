@@ -1,0 +1,102 @@
+ Video-2:
+ 1. Execution context is divided into two parts:
+ 	1. Memory
+ 	2. Code component
+
+
+ Video-3:
+
+ 1. How JS code is Executed?
+ 	1. So firstly the JS code to be executed we need Execution Context.
+ 	2. The Execution context is divided into 2 phases:
+ 		1. Memory Creation phase
+ 			1. In the memory creation phase we will be going through the code line by line and we will allocate the memory 
+ 			2. For variables we will create teh memory and store the variable value as 'undefined'
+ 			3. for functions we will create the memory and store the entire function as the value mapped to the function.
+ 		2. Code Execution phase
+ 			1. Again we will be going through the code from start line by line
+ 			2. Now the execution happens for example above we made the variable as undefined but now here we will allocate the value to that variable.
+ 			3. The function definition part of code will not be executed here
+ 			4. When the function invocation happens, here another Execution Context will be created. {So internally same Memory Creation phase and code execution phase will be created}
+ 			5. Now the inside the function when return statement is triggered then we will be going to point where this function was triggered and allot the value to that point. The Execution phase which was created will be deleted
+
+ 	3. To manage the creation and deletion of the Execution Context a call stack is used.
+ 		1. So the first element in the stack will be the Global Execution Context (GEC)
+ 		2. When a function is invoked then the new Execution context will be created above the GEC and once it was completely executed then it will be poped out.
+ 		3. So simply the definition of call stack is "Call stack handles the order of execution of Execution Contexts".
+ 		4. Call Stack also known as [Execution Context Stack, Program Stack, Control Stack, RunTime Stack, Machine Stack]
+ 		5. 
+
+
+ Video-4:
+
+ 1. Hoisting in JS (variables & functions)
+ 	1. This phenomenon occurs when we are accessing the variables before the declaration of variables
+ 	2. For example:
+ 		1. const x = 2;
+ 		2. function test(){
+ 			console.log("Hello world!")
+ 		}
+ 		3. console.log(x);
+ 		4. test();  
+ 		--> output: 
+ 		2
+ 		Hello world!
+
+
+ 		//If the same function executed again:
+ 		1. console.log(x);
+ 		2. test();
+ 		3. const x = 2;
+ 		4. function test(){
+ 			console.log("Hello world!")
+ 		}
+ 		
+ 		--> output
+ 		undefined
+ 		Hello world!
+
+ 		//If the same function executed again:
+ 		1. console.log(x);
+ 		2. test();
+ 		3. function test(){
+ 			console.log("Hello world!")
+ 		}
+
+ 		-->Output
+ 		Error
+
+ Video-5:
+ 1. Functions (How it works, how it is created) [Function Invocation and Variable Environment] [This video helps us to learn scopes, closures]
+ 	1. Doubt: Does the console.log will be ignored in memory creation phase?
+ 	2. So here basically we will be learning how the variables will be created and what values will be printed
+ 	3. Example:
+ 		1. var x =10;
+ 		2. a();
+ 		3. b();
+ 		4. function a(){
+ 			var x =100;
+ 			console.log(x);
+ 		}
+ 		5. function b(){
+ 			var x= 1;
+ 			console.log(x)
+ 		}
+ 		6. console.log(x)
+
+ 		-->output:
+ 		100
+ 		1
+ 		10
+
+Video-6:
+1. Shortest javascript functio:
+	1. The shortest JS function is empty file
+	2. When we execute this function the GEC will be created with different default functions like window, alert etc (These are created by JS Engine)
+
+
+
+
+
+
+
