@@ -93,6 +93,52 @@ Video-6:
 1. Shortest javascript functio:
 	1. The shortest JS function is empty file
 	2. When we execute this function the GEC will be created with different default functions like window, alert etc (These are created by JS Engine)
+	3. Window is a global object which will be created along with the global execution context
+	4. Javascript runs in different places like browsers, node, servers etc.
+	5. every point where the JS runs needs to have the JS engine. In case of chrome uses vite 
+	6. Global space: It is nothing but all the variables which are defined in the outer layer of the javascript program.
+	7. We can access the variables using the global object of that execution context
+	8. Doubt: Is it possible to get the global object in a functional execution context?
+
+
+Video-7:
+1. Undefined vs Not defined:
+	1. Doubt: How does if else, for loops executes in Execution 
+	2. JavaScript is loosely typed language we can put Strings in it, numbers in it etc
+
+
+Video-8:
+1. THe Scope Chain and Lexical Environment:
+	1. What is Lexical Environment?
+		1. Lexical Environment = local memory + Lexical Environment of its Parent
+
+
+Video-9:
+1. How Let and const different behavely in hoisting and Scope chain
+	1.Questions asked in Interviews:
+		1. What is Temporal dead zone
+		2. Are let and const declarations hoisted in JS?
+		3. Syntax Error vs Reference Error vs TypeError
+
+	2. Let and const declarations are hoisted in temporal dead zone.
+		1. So basically the let and const declared variables will be hoisted with the undefined but are not present in global object they are present in a seperate object called Script
+		2. Temporal dead zone: The time between the variables got hoisted and the till it is initialized with a value. When variables are in temporal dead zone we cannot access them
+		3. We are accessing elements present in Temporal dead zone then we will get the error as : Cannot access 'a' before initialization
+		4. let is more stricter than var. let, var variable cannot be declared twice with same identifier name. 
+			let a =10; let a =1000 --> throws error
+			let a =10; var a =100 --> throws error
+			var a =10; var a =1000 --> valid
+
+
+
+
+
+	3. Type error (occurs when assignment to const variable is happening)
+	4. Syntax error (When the const variable is not initialised)
+	5. Reference error
+
+	6. Try to use let and const most in day to day code life
+	7. To avoid temporal dead zone declare the variables at the top
 
 
 
