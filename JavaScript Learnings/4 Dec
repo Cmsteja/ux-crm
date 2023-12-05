@@ -142,6 +142,39 @@ Video-9:
 
 
 
+Video 10:
+1. What is Block, Scoped, shadowing?
+	1. let and const are block scoped
+	2. block is {} . IT is also known as compound statement
+	3. Block helps us to group multiple statements into one where js expects one statement.
+	4. For example, the if(true){//we can write multiple statements in this}
+	5. block scope means what all variables and functions we can access inside the block
+	6. Shadowing is nothing but the variable when it is declared inside and outside block, when we are accessing it we should not be able to change the values outside block
+	7. Shadowing works only in let, const cases where memories are allocated in seperate blocks
+	8. Illegal Shadowing:
+		1. We cannot shadow an identifier of let using var in block it is illegal
+		2. We can shadow an identifier of let using let in block, var using let in block
+	9. Scopes work in the same way for arrow functions and normal functions.
+	10. The shadowing also follows lexical scope
+
+
+
+Video 12:
+1. Closures? Important video
+	1. What is closure?
+		1. A function bind together with Lexical Environment
+	2. In js we can assign a var with function. we can pass functions as params to another function
+	3. Uses of closures:
+		1. Module Design Pattern
+		2. Currying
+		3. Functions like once
+		4. memoize
+		5. maintaining state in async world
+		6. setTimeouts
+		7. iterators
+
+
+
 
 
 
