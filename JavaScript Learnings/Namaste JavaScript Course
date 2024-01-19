@@ -1,0 +1,183 @@
+ Video-2:
+ 1. Execution context is divided into two parts:
+ 	1. Memory
+ 	2. Code component
+
+
+ Video-3:
+
+ 1. How JS code is Executed?
+ 	1. So firstly the JS code to be executed we need Execution Context.
+ 	2. The Execution context is divided into 2 phases:
+ 		1. Memory Creation phase
+ 			1. In the memory creation phase we will be going through the code line by line and we will allocate the memory 
+ 			2. For variables we will create teh memory and store the variable value as 'undefined'
+ 			3. for functions we will create the memory and store the entire function as the value mapped to the function.
+ 		2. Code Execution phase
+ 			1. Again we will be going through the code from start line by line
+ 			2. Now the execution happens for example above we made the variable as undefined but now here we will allocate the value to that variable.
+ 			3. The function definition part of code will not be executed here
+ 			4. When the function invocation happens, here another Execution Context will be created. {So internally same Memory Creation phase and code execution phase will be created}
+ 			5. Now the inside the function when return statement is triggered then we will be going to point where this function was triggered and allot the value to that point. The Execution phase which was created will be deleted
+
+ 	3. To manage the creation and deletion of the Execution Context a call stack is used.
+ 		1. So the first element in the stack will be the Global Execution Context (GEC)
+ 		2. When a function is invoked then the new Execution context will be created above the GEC and once it was completely executed then it will be poped out.
+ 		3. So simply the definition of call stack is "Call stack handles the order of execution of Execution Contexts".
+ 		4. Call Stack also known as [Execution Context Stack, Program Stack, Control Stack, RunTime Stack, Machine Stack]
+ 		5. 
+
+
+ Video-4:
+
+ 1. Hoisting in JS (variables & functions)
+ 	1. This phenomenon occurs when we are accessing the variables before the declaration of variables
+ 	2. For example:
+ 		1. const x = 2;
+ 		2. function test(){
+ 			console.log("Hello world!")
+ 		}
+ 		3. console.log(x);
+ 		4. test();  
+ 		--> output: 
+ 		2
+ 		Hello world!
+
+
+ 		//If the same function executed again:
+ 		1. console.log(x);
+ 		2. test();
+ 		3. const x = 2;
+ 		4. function test(){
+ 			console.log("Hello world!")
+ 		}
+ 		
+ 		--> output
+ 		undefined
+ 		Hello world!
+
+ 		//If the same function executed again:
+ 		1. console.log(x);
+ 		2. test();
+ 		3. function test(){
+ 			console.log("Hello world!")
+ 		}
+
+ 		-->Output
+ 		Error
+
+ Video-5:
+ 1. Functions (How it works, how it is created) [Function Invocation and Variable Environment] [This video helps us to learn scopes, closures]
+ 	1. Doubt: Does the console.log will be ignored in memory creation phase?
+ 	2. So here basically we will be learning how the variables will be created and what values will be printed
+ 	3. Example:
+ 		1. var x =10;
+ 		2. a();
+ 		3. b();
+ 		4. function a(){
+ 			var x =100;
+ 			console.log(x);
+ 		}
+ 		5. function b(){
+ 			var x= 1;
+ 			console.log(x)
+ 		}
+ 		6. console.log(x)
+
+ 		-->output:
+ 		100
+ 		1
+ 		10
+
+Video-6:
+1. Shortest javascript functio:
+	1. The shortest JS function is empty file
+	2. When we execute this function the GEC will be created with different default functions like window, alert etc (These are created by JS Engine)
+	3. Window is a global object which will be created along with the global execution context
+	4. Javascript runs in different places like browsers, node, servers etc.
+	5. every point where the JS runs needs to have the JS engine. In case of chrome uses vite 
+	6. Global space: It is nothing but all the variables which are defined in the outer layer of the javascript program.
+	7. We can access the variables using the global object of that execution context
+	8. Doubt: Is it possible to get the global object in a functional execution context?
+
+
+Video-7:
+1. Undefined vs Not defined:
+	1. Doubt: How does if else, for loops executes in Execution 
+	2. JavaScript is loosely typed language we can put Strings in it, numbers in it etc
+
+
+Video-8:
+1. THe Scope Chain and Lexical Environment:
+	1. What is Lexical Environment?
+		1. Lexical Environment = local memory + Lexical Environment of its Parent
+
+
+Video-9:
+1. How Let and const different behavely in hoisting and Scope chain
+	1.Questions asked in Interviews:
+		1. What is Temporal dead zone
+		2. Are let and const declarations hoisted in JS?
+		3. Syntax Error vs Reference Error vs TypeError
+
+	2. Let and const declarations are hoisted in temporal dead zone.
+		1. So basically the let and const declared variables will be hoisted with the undefined but are not present in global object they are present in a seperate object called Script
+		2. Temporal dead zone: The time between the variables got hoisted and the till it is initialized with a value. When variables are in temporal dead zone we cannot access them
+		3. We are accessing elements present in Temporal dead zone then we will get the error as : Cannot access 'a' before initialization
+		4. let is more stricter than var. let, var variable cannot be declared twice with same identifier name. 
+			let a =10; let a =1000 --> throws error
+			let a =10; var a =100 --> throws error
+			var a =10; var a =1000 --> valid
+
+
+
+
+
+	3. Type error (occurs when assignment to const variable is happening)
+	4. Syntax error (When the const variable is not initialised)
+	5. Reference error
+
+	6. Try to use let and const most in day to day code life
+	7. To avoid temporal dead zone declare the variables at the top
+
+
+
+Video 10:
+1. What is Block, Scoped, shadowing?
+	1. let and const are block scoped
+	2. block is {} . IT is also known as compound statement
+	3. Block helps us to group multiple statements into one where js expects one statement.
+	4. For example, the if(true){//we can write multiple statements in this}
+	5. block scope means what all variables and functions we can access inside the block
+	6. Shadowing is nothing but the variable when it is declared inside and outside block, when we are accessing it we should not be able to change the values outside block
+	7. Shadowing works only in let, const cases where memories are allocated in seperate blocks
+	8. Illegal Shadowing:
+		1. We cannot shadow an identifier of let using var in block it is illegal
+		2. We can shadow an identifier of let using let in block, var using let in block
+	9. Scopes work in the same way for arrow functions and normal functions.
+	10. The shadowing also follows lexical scope
+
+
+
+Video 12:
+1. Closures? Important video
+	1. What is closure?
+		1. A function bind together with Lexical Environment
+	2. In js we can assign a var with function. we can pass functions as params to another function
+	3. Uses of closures:
+		1. Module Design Pattern
+		2. Currying
+		3. Functions like once
+		4. memoize
+		5. maintaining state in async world
+		6. setTimeouts
+		7. iterators
+	4. What is Closure?
+		1. Closure is nothing but the function that have access to its variables in its surrounding context and even after its surrounding function returned. This is possible because closure is not just the function code itself but also the function code with its lexiccal environment
+
+
+
+
+
+
+

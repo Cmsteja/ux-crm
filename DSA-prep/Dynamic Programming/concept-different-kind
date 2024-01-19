@@ -1,0 +1,565 @@
+Dynamic programming (DP) is a method for solving complex problems by breaking them down into simpler subproblems and storing the solution to each subproblem to avoid redundant calculations. In the context of 1D dynamic programming, problems often involve optimizing some function over a sequence or array.
+
+
+How can we identify whether a problem is related to DP or not?
+1. If they asked maximum, minimum., longest --> optimal cases
+2. If there is a recursion necessity with overlapping cases (for example include a value, exclude a value)
+
+//Aditya-verma types of DP problems:
+	1. 0-1 knapsack problem [Done]
+	2. Unbounded Knapsack [Done]
+	3. Fibonacci [Done]
+	4. LCS [Done]
+	5. LIS
+	6. Kadanes Algorithm 
+	7. Matrix Chain multiplication [Done]
+	8. DP on Trees [Done]
+	9. DP on Grid
+
+	Subset: A subset refers to a collection of elements that are all contained within another set, possibly including all of its elements.
+	A={1,2,3} --> {1,2}, {1},{3,2}
+	A subset is a collection of elements from a set.
+
+	Subsequence: A subarray is a contiguous segment or portion of an array where elements appear consecutively and in the same order as in the original array.
+	[1,2,3] -> [1],[2],[3],[1,2],[2,3],[1,3],[1,2,3]
+	A subarray is a contiguous segment of an array
+
+	SubArray: A subsequence is a sequence that can be derived from another sequence by deleting zero or more elements without changing the order of the remaining elements.
+	[1,2,3] -> [1],[2],[3],[1,2],[2,3],[1,2,3]
+	A subsequence is a derived sequence where elements can be skipped but their order is maintained.
+
+	Substring: is similar to subarray in string
+
+	In any recursion focus on 3 points:
+	1. Base condition
+	2. Choice Diagram
+	3, Input we have to make smaller
+
+Here are some classic problems that cover various aspects of 1D dynamic programming:
+
+1. **Fibonacci Sequence**: Compute the nth Fibonacci number using memoization to store previously computed values.
+
+	int fib(int n){
+		if(n==0 ||n==1){
+		return n;
+		}
+		int dp[n+1];
+		dp[0]=0;
+		dp[1]=1;
+		for(int i=2;i<=n;i++){
+			dp[i]=dp[i-1]+dp[i-2];
+		}
+		return dp[n];
+	}
+
+5. **0/1 Knapsack Problem**: Given a set of items, each with a weight and a value, determine the maximum value that can be obtained by selecting a subset of items such that the total weight does not exceed a given limit.
+	1. Variations in Kanpsack:
+
+		//Recursion
+
+
+		//base Condition
+		if(n==0 ||W==0){
+			return 0;
+		}
+		if(wt[n-1]<=W){
+			return max(val[n-1]+kp(n-1,W-wt[n-1],wt,val), kp(n-1,W,wt,val));
+		}else{
+			return kp(n-1,W,wt,val);
+		}
+
+		//Top Down Approach Code:
+		for(int i=0;i<=n;i++){
+			for(int j=0;j<W;j++){
+				if(i==0 || j==0){
+					dp[i][j]=true;
+					break;
+				}
+				if(wt[i-1]<j){
+					dp[i][j]=max(val[i-1]+dp[i-1][j-wt[i-1]],dp[i-1][j]);
+				}else{
+					dp[i][j]=dp[i-1][j]
+				}
+			}
+		}
+
+		1. Subset Sum
+			Need to find the possible subset with the given sum:
+			1.	for(int i=0;i<=n;i++){
+					for(int j=0;j<W;j++){
+						if(i==0 || j==0){
+							dp[i][j]=true;
+							break;
+						}
+						if(wt[i-1]<j){
+							dp[i][j]=dp[i-1][j]|| dp[i-1][j-wt[i-1]];
+						}else{
+							dp[i][j]=dp[i-1][j];
+						}
+					}
+				}
+
+
+
+		2. Equal Sum partition
+			Need to divide the set into multiple partitions
+			and need to find the subsets with equal sum
+
+			1.	if(W%2!=0)
+					return false;
+				for(int i=0;i<=n;i++){
+					for(int j=0;j<W/2;j++){
+						if(i==0 || j==0){
+							dp[i][j]=true;
+							break;
+						}
+						if(wt[i-1]<j){
+							dp[i][j]=dp[i-1][j]|| dp[i-1][j-wt[i-1]];
+						}else{
+							dp[i][j]=dp[i-1][j];
+						}
+					}
+				} 
+		3. Count of subset sum:
+			1. 
+				for(int i=0;i<=n;i++){
+					for(int j=0;j<W/2;j++){
+						if(i==0 ){
+							dp[i][j]=0;
+							break;
+						}
+						if(j==0){
+							dp[i][j]=1;
+							break;
+						}
+						if(wt[i-1]<j){
+							dp[i][j]=dp[i-1][j] + dp[i-1][j-wt[i-1]];
+						}else{
+							dp[i][j]=dp[i-1][j];
+						}
+					}
+				} 
+
+		4. minimum subset difference
+			Need to find the minimum difference possible between the subsets:
+			1. you can do a subset problem and you can find the last array in the dp matrix where the element is true and using that index find the min(TotSum-2*index)
+
+				for(int i=0;i<=n;i++){
+					for(int j=0;j<W;j++){
+						if(i==0 || j==0){
+							dp[i][j]=true;
+							break;
+						}
+						if(wt[i-1]<j){
+							dp[i][j]=dp[i-1][j]|| dp[i-1][j-wt[i-1]];
+						}else{
+							dp[i][j]=dp[i-1][j];
+						}
+					}
+				}
+				int index;
+				for(int j=0;j<W/2;i++){
+					if(dp[n][j]==true){
+						index =j;
+					}
+				}
+				return W-(2*index);
+
+		5. Target Sum
+		
+		6. no.of subset with given difference
+
+6. Fractional Knapsack (Greedy Approach)
+
+7. Unbounded Knapsack
+	LOGIC:
+
+		for(int i=0;i<=n;i++){
+			for(int j=0;j<W;j++){
+				if(i==0 || j==0){
+					dp[i][j]=0;
+					continue;
+				}
+				if(wt[i-1]<W){
+					dp[i][j] = max(dp[i][j-wt[i-1]]+val[i-1], dp[i-1][j])
+				}else{
+					dp[i][j]=dp[i-1][j]
+				}
+			}
+		}
+	1. Rod Cutting:
+		We need to cut the rod in such a way that the profit will be maximum based on the part of pieces been divided
+		lenght[]= [1,2,... n]
+		cost[]= [],
+		length of rod = n
+
+		for(int i=0;i<=n;i++){
+			for(int j=0;j<=n;j++){
+				if(i==0 || j==0){
+					dp[i][j]=0;
+					continue;
+				}
+				if(length[i-1]<n){
+					dp[i][j] = max(dp[i][j-length[i-1]]+cost[i-1], dp[i-1][j])
+				}else{
+					dp[i][j]=dp[i-1][j]
+				}
+			}
+		}
+	2. Maximum Ribbon Cutting
+	3. Coin Change -I (Maximum no.of ways)
+		Given an array of coins we need to find max number of ways we can divide the coins to make the given sum
+			coin = [1,2,3]
+			sum = 5
+			ways = [
+				1. 2+3
+				2. 1+1+1+1+1
+				3. 1+1+1+2
+				4. 1+1+3
+				5. 1+2+2
+			]
+
+			SO the solution is:
+				knapsack -> wt, val,W 
+				this sum -> coin, -, 5
+			for(int i=0;i<3;i++){
+				for(int i=0;i<sum;i++){
+					if(i==0 ){
+						dp[i][j] = 0;
+					}
+					if(j==0){
+						dp[i][j]=1;
+					}
+					if(coin[i-1]<=W){
+						dp[i][j]=(dp[i][j-coin[i-1]]+dp[i-1][j]);
+					}else{
+						dp[i][j]=dp[i-1][j];
+					}
+				}
+			}
+	4. Coin Change - II (minimum no.of coins)
+		Need to find the minimum No.of coins to make the given sum:
+
+		Solution: 	This can be done by finding the 
+
+		for(int i=0;i<3;i++){
+				for(int j=0;j<sum;j++){
+					if(j==0){
+						dp[i][j]=0;
+						continue;
+					}
+					if(i==0 ){
+						dp[i][j] = INT_MAX--1;
+						continue;
+					}
+					if(j%coin[0]==0){
+						dp[i][j]= j/coin[0];
+						continue;
+					}else{
+						dp[i][j]=INT_MAX-1;
+						continue;
+					}
+					if(j/coin[i-1]<=sum){
+						dp[i][j]=min(dp[i][j-coin[i-1]]+1, dp[i-1][j])
+					}else{
+						dp[i][j]=dp[i-1][j]
+					}
+				}
+			}
+
+8. Longest Common Subsequence:
+	PS: If there are two string x, y then we have to find the length common subsequence between x and y.
+	Recursion:
+		Base Condition:
+		if(lenX==0 || lenY==0){
+			return 0;
+		}
+		Choice Diagram:
+		if(x[n-1]==y[m-1]){
+			return 1+LCS(n-1,m-1, remaining inputs)
+		}else{
+			return max(LCS(n-1,m,remaining inputs),LCS(n,m-1,remaining,inputs));
+		}
+
+	Memoization:
+		dp[n+1,m+1];
+		for(int i=0;i<=n;i++){
+			dp[i][0]=0;
+		}
+		for(int i=0;i<=m;i++){
+			dp[0][i]=0;
+		}
+		LCS(){
+			if(dp[n][m]!=-1){
+				return dp[n][m];
+			}
+			//Initialization:
+			if(x[n-1]==y[m-1]){
+				dp[n][m] = LCS(n-1,m-1,x,y)+1;
+			}else{
+				dp[n][m] = max(LCS(n-1,m,x,y),LCS(n,m-1,x,y));
+			}
+		}
+
+	Top Down Approach:
+		for(int i=0;i<=n;i++){
+			for(int j=0;j<=m;j++){
+				if(i==0 || j==0){
+					dp[i][j] = 0;
+					continue;
+				}
+				if(x[i-1]==y[j-1]){
+					dp[i][j]=dp[i-1][j-1]+1;
+				}else{
+					dp[i][j]=max(dp[i-1][j],dp[i][j-1]);
+				}
+			}
+		}
+		return dp[n][m];
+		initialization of a 2D array:
+			int dp[n+1][m+1];
+			memset(dp,-1,sizeOf(t));
+
+
+
+	1. Longest Common Substring:
+		The substring is similar to subarray, we have to have a continuous thing, so the change in the choice diagram will
+			if(x[i-1]==y[j-1]){
+				dp[i][j] = 1+dp[i-1][j-1];
+			}else{
+				dp[i][j]=0;
+			}
+
+	2. Print Longest Common Subsequnce:
+		Here we have to print the common subsequence:
+
+		subsequence means we have to get the entire subsequence it means that instead of storing the length we have to store the string
+
+		He mentioned a different logic:
+		if(x[i-1]==y[j-1]){
+			dp[i][j]=dp[i-1][j-1]+x[i-1];
+		}else{
+			dp[i][j]=dp[i-1][j]>dp[i][j-1]?dp[i-1][j]:dp[i][j-1];
+		}
+
+		Lgoic that he provided:
+			1. Contruct the dp tree using the LCS logic
+			2. after that
+				while(i>=0 && j>=0){
+					if(x[i-1]==y[j-1]){
+						s.pb(x[i-1]);
+						i--;
+						j--;
+					}else{
+						if(dp[i][j-1]>dp[i-1][j]){
+							j--;
+						}else{
+							i--;
+						}
+					}
+				}
+				return reverse(s.begin(),s.end());
+
+
+	3. Shortest Common SuperSequence
+		Problem Statement: 
+			If there are two strings a, b find the shortest supersequence which has both a, b
+		Solution: 
+			a = "SSFDFSDF",
+			b="UIOPERR"
+			ans = len(a)+len(b)-len(LCS(a,b));
+
+
+	4. Print SCS:
+		Logic that he provided:
+			1. Contruct the dp tree using the LCS logic
+			2. after that
+				while(i>=0 && j>=0){
+					if(x[i-1]==y[j-1]){
+						s.pb(x[i-1]);
+						i--;
+						j--;
+					}else{
+						if(dp[i][j-1]>dp[i-1][j]){
+							s.pb(y[j-1]);
+							j--;
+						}else{
+							s.pb(x[i-1]);
+							i--;
+						}
+					}
+				}
+				while(i>=0){
+					s.pb(x[i-1]);
+					i--;
+				}
+				while(j>=0){
+					s.pb(y[j-1]);
+					j--;
+				}
+				return reverse(s.begin(),s.end());
+
+	5. Min no.of insertion and Deletions to convert string a  to b
+		Solution:
+			1. Find the LCS of a, b
+			2. Then ans = b-len(LCS)+(a-len(LCS))
+	6. longest Repeating SubSequence (repeating SubSequence ki manam i!=j pedatham)
+		Subsequence:
+			if(x[i-1]==y[j-1] && i!=j){
+				dp[i][j]=dp[i-1][j-1]+1;
+			}else{
+				dp[i][j] = max(dp[i-1])[j],dp[i][j-1]);
+			}
+
+	7.[Left] Length of largest subsequence of a which is a substring of b
+	8. SUbsequence Pattern matching
+		Solution:
+			check if a is a subsequence of b or not?
+
+			find LCS(a,b) and check if LCS(a,b)==a if yes then return true else return false
+	9. [Left] Count how many times a appears as subsequence in b
+	10. Largest Palindromic Subsequence
+		This is nothing but we have to find the subsequence of a, rev(a) 
+		Example:
+			a="SRTYWY"
+			rev(a) = "YWYTRS"
+
+			the palindromic subsequence is YWY
+			The LCS of a, rev(a) is YWY
+	11. Largest Palindromic Substring
+		This is nothing but we have to find the substring of a, rev(a) 
+
+	12. Count of Palindromic Substring
+
+	13. Min # of deletions in a string to make it palindromic
+		This is nothing but we will find the subsequence of a, rev(a):
+		After:
+			ans = len(a) - len(LCS(a,rev(a)));
+	14. Min # of insertions in a string to make it palindromic
+		This is nothing but we will find the subsequence of a, rev(a):
+		After:
+			ans = len(a) - len(LCS(a,rev(a)));
+
+	[Need to definitions of 
+		1. Subsequence
+		2. Substring
+		4. SuperString]
+
+9. Longest Increasing Subsequence:
+	Given an array of integers, find the length of the longest subsequence such that all elements of the subsequence are sorted in increasing order.
+
+10. Matrix Chain multiplication:
+	MCM is nothing but the strategy to use the divide and conquer approach making it much efficient using memorization and Bottom Top approach
+	Format:
+		int solve(int arr, int i,int j){
+			//Base Condition
+			if(invaludInput){
+				return 0;
+			}
+			for(int k=i;k<=j;k++){
+				int tempAns = solve(arr,i,k)+solve(arr,k+1,j);
+				ans = function(tempAns);
+			}
+			return ans;
+		}
+	1. MCM
+		Problem statement:
+		 We need to multiply matrices such that the number of multiplications will be minimum.
+		Solution:
+			int solve(int arr, int i, int j){
+				if(i>=j){
+					return 0;
+				}
+				int mini = INT_MAX-1;
+				for(int k=i;k<=j-1;k++){
+					int tempAns = max(solve(arr,i,k),solve(arr,k+1,j))+arr[i-1]*arr[k]*arr[j];
+					mini = min(mini, tempAns);
+				}
+					return mini;
+
+			}
+	2. Printing MCM
+	3. Evaluate Expr to true/ Boolean parenthesization
+	4. Min/Max value of an expression
+	5. Palindrome Partitioning
+	6. Scramble String
+	7. Egg Dropping Problem
+
+6. **Minimum Cost Path**: Given a 2D grid with costs associated with each cell, find the minimum cost path from the top-left corner to the bottom-right corner, moving only down or right.
+
+8. **Jump Game**: Given an array of non-negative integers representing the maximum jump length at each position, determine if you can reach the last index starting from the first index.
+
+9. **House Robber**: Given an array representing the amount of money in each house, determine the maximum amount of money you can rob without alerting the police, where adjacent houses are connected and cannot be robbed simultaneously.
+
+10. **Palindromic Substrings**: Given a string, find the total number of palindromic substrings in it.
+
+
+These problems cover a wide range of concepts in 1D dynamic programming, including memoization, tabulation, optimization, and decision-making. Solving these problems will provide a solid foundation for understanding and applying dynamic programming techniques.
+
+
+11. DP on trees
+	1. General Syntax
+
+		int tree(){
+			//Base Condtiion
+			//hypothesis
+			//Induction
+		}
+	2. How dp can be applied to Trees
+	3. Diameter of a Binary Tree
+		int solve(Node* root, int& res){
+			if(root==NULL){
+			return 0;
+			}
+			//hypothesis
+			int left = solve(root->left, res);
+			int right = solve(root->right,res);
+			//induction
+			int tempAns = 1+max(left,right);
+			int ans = max(1+left+right,tempAns);
+			int res = max(ans,res);
+			return tempAns;
+		}
+	4. maximum Path sum from Any node to any node
+		int solve(Node* root, int& res){
+			if(root==NULL){
+			return 0;
+			}
+			//hypothesis
+			int left = solve(root->left, res);
+			int right = solve(root->right,res);
+			//induction
+			int tempAns = max(left,right)>0? root->val+max(left,right):root->val;
+			int ans = max(root->val+left+right,tempAns);
+			int res = max(ans,res);
+			return tempAns;
+		}
+
+	5. maximum path sum from leave to leave
+		int solve(Node* root, int& res){
+			if(root==NULL){
+			return 0;
+			}
+			//hypothesis
+			int left = solve(root->left, res);
+			int right = solve(root->right,res);
+			//induction
+			int tempAns = root->val+max(left,right);
+			int ans = max(root->val+left+right,tempAns);
+			int res = max(ans,res);
+			return tempAns;
+		}
+	6. Diameter of N-ary tree
+12. Arithmetic Sum -II
+  1. This the dp will be like
+  		for(int i=1;i<n;i++){
+  			for(int j=0;j<i;j++){
+  				int diff = dp[i]-dp[j];
+  				dp[i][diff]+=1;
+  				if(dp[j].count(diff)>0){
+  					dp[i][diff]+=dp[j][diff];
+  					count+=dp[j][diff];
+  				}
+  			}
+  		}
+  		return count;

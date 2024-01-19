@@ -1,0 +1,429 @@
+Topics to learn:
+1. DBMS Questions
+2. SQL Queries basic, MongoDB queries basic
+3. Spring Boot Questions
+4. Java Based Questions
+5. OOPS questions
+6. Past Projects: ONELEAD, Pipeline built for leadSquared
+7. Explain the technical design of the document
+
+
+DBMS: (Data Base Management System)
+	1. A Database Management System (DBMS) is a software system used to define, create, manipulate, and manage databases.
+	2. There are two types of DataBases:
+		DBMS: 
+			Manages databases but does not necessarily support a tabular structure or relationships. Examples include MS Access and FileMaker.
+		RDBMS: 
+			Relational Database Management System. It manages data that is stored in tables and supports the relational model. Examples include MySQL, PostgreSQL, and Oracle.
+		DBMS vs RDBMS:
+			1. DBMS supports only basic update, create and delete there is no scope of aggregration and complex operations
+			2. DBMS supports hirarechical, network and relational models but RDBMS falls on table model
+			3. DBMS: Ensures basic data integrity through features like data validation, constraints, and transaction management.RDBMS: Provides advanced data integrity features such as primary keys, foreign keys, unique constraints, and referential integrity to maintain data accuracy and consistency.
+			4. 
+
+
+	3. What is ACID full form? (RDBMS platforms ensures reliability and consistency using these 4 principles)
+		A - Atomicity - Ensures that all operations within a transaction are completed successfully. If any operation fails, the entire transaction is rolled back.
+		C - consistency -  Ensures that a transaction brings the database from one valid state to another. All constraints and rules are enforced
+		I - Isolation - Ensures that concurrent transactions do not interfere with each other. Each transaction appears to execute in isolation.
+		D - Durability - Ensures that once a transaction is committed, its effects are permanent and will survive system failures.
+
+	4. What is normalization? Why is it important?
+		1. Normalization is the process of organizing data in a database to reduce redundancy and improve data integrity.
+		2. It is important because it helps in:
+			Eliminating redundant data.
+			Reducing data anomalies.
+			Ensuring data consistency.
+			Simplifying data maintenance.
+		3. There is 1NF (A column should not contain multiple values, better store it in multiple child tables or store create multiple records with id+course as primary key), 2NF, 3NF
+
+	5. A transaction is a sequence of one or more operations (e.g., insert, update, delete) that are executed as a single unit. A transaction ensures data integrity and consistency.
+
+	6. stored procedure is a precompiled collection of sql queries which are stored in database and can be executed as a single unit.
+
+		The choice between horizontal scaling (multiple servers) and vertical scaling (single server with increased capacity) depends on various factors, including the specific requirements, constraints, and goals of the system or application. There is no one-size-fits-all answer, and the best approach may vary based on the context. Here are some considerations to help determine the most suitable approach:
+
+		1. **Scalability Requirements**:
+		   - **Horizontal Scaling**: Ideal for applications or systems with unpredictable or rapidly growing workloads, where linear scalability is essential.
+		   - **Vertical Scaling**: Suitable for applications with relatively stable and predictable workloads that can be accommodated within the capacity of a single, powerful server.
+
+		2. **Performance Goals**:
+		   - **Horizontal Scaling**: Can provide high availability, fault tolerance, and the ability to handle a large number of concurrent users or requests by distributing the load across multiple servers.
+		   - **Vertical Scaling**: Offers a simpler and potentially more cost-effective solution for applications with moderate scalability requirements, where increasing the capacity of a single server can meet performance goals.
+
+		3. **Cost Considerations**:
+		   - **Horizontal Scaling**: May involve higher upfront costs for hardware, networking, and infrastructure setup, but can be more cost-effective in the long run for applications that require extensive scalability.
+		   - **Vertical Scaling**: May involve significant costs for upgrading hardware components, and there is an upper limit to how much a single server can be scaled vertically, which may limit long-term scalability.
+
+		4. **Complexity and Management**:
+		   - **Horizontal Scaling**: Introduces complexity in design, configuration, and management of a distributed system, including considerations for load balancing, data synchronization, and fault tolerance.
+		   - **Vertical Scaling**: Generally simpler to implement and manage, as it involves a single server with enhanced capabilities, but may require downtime or service interruptions during hardware upgrades.
+
+		5. **Fault Tolerance and High Availability**:
+		   - **Horizontal Scaling**: Offers inherent fault tolerance and high availability, as the system can continue to operate even if some servers fail.
+		   - **Vertical Scaling**: Relies on the reliability of a single server, and any hardware failures or maintenance activities may result in downtime or service disruptions.
+
+		In summary, the best approach between horizontal scaling and vertical scaling depends on the specific requirements, scalability needs, performance goals, cost considerations, and complexity tolerance of the system or application. It is essential to evaluate the pros and cons of each approach in the context of the particular use case and make an informed decision based on the trade-offs involved.
+
+
+SQL Queries:
+	1. SELECT Statements:
+		1. Write a SQL query to retrieve all records from a table named Employees.
+		A: SELECT * from Employees
+		2. Write a SQL query to fetch unique values from a column named Department from a table named Employees.
+		A: SELECT DISTINCT Department FROM Employees
+		3. How do you select top 5 records from a table?
+		A: SELECT * from Employees LIMIT 5
+		4. How to get topmost 2nd element 
+		A: SELECT * from Employees LIMIT 2 OFFSET 1;
+			SELECT Salary from Employees ORDER BY Salary DESC LIMIT 2 OFFSET 1;
+
+	2. FILTERING and SORTING:
+		1. Write a SQL query to retrieve employees whose Salary is greater than 50000.
+		A: SELECT * FROM Employees where Salary>50000
+		2. Write a SQL query to fetch employees sorted by HireDate in descending order.
+		A: SELECT * from Employees ORDER BY HireDate DESC
+
+	3. Joins:
+		1. Explain the difference between INNER JOIN and LEFT JOIN.
+		A: 
+		2. Write a SQL query to fetch all employees along with their corresponding department names using an INNER JOIN between Employees and Departments tables.
+		A: 
+		3. How do you perform a self-join?
+		A:
+
+	4. Aggregation:
+		1. Write a SQL query to calculate the average Salary of all employees.
+		A:
+		2. Explain the difference between GROUP BY and HAVING clauses.
+		A:
+		3. Write a SQL query to find the department with the maximum number of employees.
+		A:
+
+	5. Subqueries:
+		1. What is a subquery? Provide an example.
+		2. How would you use a subquery to fetch records that satisfy certain conditions?
+		3. Explain the difference between correlated and non-correlated subqueries.
+	6. Indexes and Optimization:
+		1. What is an index in SQL? Why is it important?
+		2. How do indexes affect query performance?
+		3. Write a SQL query to create an index on the LastName column of the Employees table.
+
+	7. Normalization:
+		1. What is normalization in SQL? Why is it important?
+		2. Explain the first, second, and third normal forms with examples.
+
+	8. Transactions:
+		1. What is a SQL transaction? Provide an example of a transaction.
+		2. Explain the ACID properties of a transaction.
+
+	9. Views:
+		1. What is a SQL view? How is it different from a table?
+		2. Write a SQL query to create a view that retrieves all employees from the Employees table where DepartmentID is 1.
+
+	10. Data Modification:
+		1. Write a SQL query to insert a new employee into the Employees table.
+		2. Write a SQL query to update the Salary of an employee with EmployeeID 101 to 60000.
+
+Spring and Java Questions:
+	1. What is MVC model?
+	A. Model view Controller model used for web applications
+	2. What is Bean?
+	A. Bean helps us to provide a structured environment that can help in handling multithreading issues.
+		In the context of the Spring Framework, a bean is an object that is instantiated, assembled, and managed by the Spring IoC (Inversion of Control) container. Beans are the fundamental building blocks of a Spring application and represent the components that comprise the application's business logic, data access, configuration, and other functionalities.
+	3. What is Multi Threading?
+	A. Thread is nothing but a process if multiple process executes at the same time then we will be calling it as multi threading process. This helps us to give faster response
+	4. What is Dependency injection?
+	A. Dependency injection is the process of injection of a beans at the point where the objects will be created and managed. 
+	5. What is difference between Abstract class and Interface Class?
+	A. Abstract Class: 
+			1. An abstract class is a class that cannot be instantiated on its own way and may contain abstract methods and concrete methods
+			2. A class can be inherited by only one abstract class using extends 
+			3. Abstract class have public, private and protected access modifiers (Need to learn these)
+			4. Abstract classes can have instance variables, constructors, and static methods.
+			5. An abstract class can provide default implementations for some or all of its methods. 
+			6. They are suitable for defining a template for subclasses to follow
+
+		Interface:
+			1.  An interface is a reference type similar to a class that contains only abstract methods (methods without an implementation) and constant declarations (e.g., static final variables).
+			2. A class can implement multiple interfaces, using the implements keyword. This allows for multiple inheritance of type.
+			3.  All members of an interface are implicitly public and abstract (in Java), meaning they are accessible from any class that implements the interface, and they do not have a concrete implementation in the interface itself.
+			4. Interface has only abstract methods, (static methods or default methods)
+			5. Default Methods:
+				1. A default method in an interface is a method that has a default implementation. It provides a default behavior that can be used as-is by implementing classes, or it can be overridden by the implementing classes if necessary.
+				2. 
+
+			static methods cannot be overidden in the implementing class
+
+
+	6. Beans-> Dependency Injection -> (Thread Safe, singleton scoped(Single instance of bean is shared accross the application (This can cause concurrecy issues)))
+	7.Different Types of Bean Scopes in Spring:
+		1. SingleTon Scope
+		2. ProtoType Scope (These are instantiated everytime they are requested)
+		3. Request Scope
+		4. Session Scope
+
+		(Request and Session Scopes): These scopes are specific to web applications and allow beans to be tied to the lifecycle of an HTTP request or session, providing a controlled environment for managing resources and state in a multithreaded web application.
+	8. Thread Safety Mechanisms:
+		1. While beans themselves are not a solution to multithreading issues, Java frameworks and libraries often provide mechanisms and utilities for handling concurrency and ensuring thread safety.
+		2. Synchronized Methods: 
+			By using synchronized methods or blocks within bean methods that modify shared resources, developers can ensure that only one thread can access and modify the resource at a time.
+		3. Concurrent Collections: 
+			Java's java.util.concurrent package provides concurrent collection classes (e.g., ConcurrentHashMap, CopyOnWriteArrayList) that are designed to be thread-safe and can be used within beans to manage shared collections in a multithreaded environment.
+	9. Asynchronous Processing:
+		Java frameworks like Spring provide support for asynchronous processing, allowing time-consuming tasks to be offloaded to background threads or worker pools, freeing up the main application thread and improving scalability and responsiveness.
+
+	10. Difference Between Heap and Stack memory:
+		1. Heap Memory is a dynamic memory allocation managed by JGC which stores the instances of objects, arrays etc where new keyword is used
+		2. Stack Memory is a static memory allocation which will be created when a method is called and for all the local variables memory will be created and will be delelted once the method returns
+
+	11. In default the method calls between controller and service layer are synchronized right?
+
+
+	12. Can static methods can be overriden? Can static final methods can be overidden?
+
+
+SOLID
+	S - SRP (Single Responsibility Principle): A class should have only one reason to change, meaning that a class should have only one job or responsibility.
+	O - OCP (Open/ Closed Principle): Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.
+	L - LSP (Liskov Substitution Principle): Subtypes must be substitutable for their base types without altering the correctness of the program.
+	I - ISP (Interface Segragation Principle): Clients should not be forced to depend on interfaces they do not use. This means that larger interfaces should be split into smaller, more specific ones.
+	D - DIP (Dependency Injection Principle): High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions.
+
+	SOLID is a set of five design principles that promote good software design practices. These principles aim to make software designs more understandable, flexible, and maintainable. The SOLID acronym stands for:
+
+	1. **Single Responsibility Principle (SRP)**
+	2. **Open/Closed Principle (OCP)**
+	3. **Liskov Substitution Principle (LSP)**
+	4. **Interface Segregation Principle (ISP)**
+	5. **Dependency Inversion Principle (DIP)**
+
+	Let's briefly discuss each principle and provide a simple example in Java:
+
+	### 1. Single Responsibility Principle (SRP)
+	A class should have only one reason to change, meaning that a class should have only one job or responsibility.
+
+	**Example:**
+	```java
+	// Not following SRP
+	class Worker {
+	    void work() {
+	        // Doing work related to multiple tasks
+	    }
+	}
+
+	// Following SRP
+	class Painter {
+	    void paint() {
+	        // Painting related work
+	    }
+	}
+
+	class Writer {
+	    void write() {
+	        // Writing related work
+	    }
+	}
+	```
+
+	### 2. Open/Closed Principle (OCP)
+	Software entities (classes, modules, functions, etc.) should be open for extension but closed for modification.
+
+	**Example:**
+	```java
+	// Not following OCP
+	class AreaCalculator {
+	    double calculateArea(Object shape) {
+	        // Code to calculate area for different shapes
+	    }
+	}
+
+	// Following OCP
+	interface Shape {
+	    double area();
+	}
+
+	class Rectangle implements Shape {
+	    public double area() {
+	        // Calculate area of rectangle
+	    }
+	}
+
+	class Circle implements Shape {
+	    public double area() {
+	        // Calculate area of circle
+	    }
+	}
+	```
+
+	### 3. Liskov Substitution Principle (LSP)
+	Subtypes must be substitutable for their base types without altering the correctness of the program.
+
+	**Example:**
+	```java
+	// Not following LSP
+	class Rectangle {
+	    int width;
+	    int height;
+	}
+
+	class Square extends Rectangle {
+	    void setWidth(int width) {
+	        this.width = width;
+	        this.height = width;
+	    }
+	}
+
+	// Following LSP
+	abstract class Shape {
+	    abstract int area();
+	}
+
+	class Rectangle extends Shape {
+	    int width;
+	    int height;
+
+	    int area() {
+	        return width * height;
+	    }
+	}
+
+	class Square extends Shape {
+	    int side;
+
+	    int area() {
+	        return side * side;
+	    }
+	}
+	```
+
+	### 4. Interface Segregation Principle (ISP)
+	Clients should not be forced to depend on interfaces they do not use. This means that larger interfaces should be split into smaller, more specific ones.
+
+	**Example:**
+	```java
+	// Not following ISP
+	interface Worker {
+	    void work();
+	    void eat();
+	}
+
+	// Following ISP
+	interface Workable {
+	    void work();
+	}
+
+	interface Feedable {
+	    void eat();
+	}
+
+	class Worker implements Workable, Feedable {
+	    // Implement methods
+	}
+	```
+
+	### 5. Dependency Inversion Principle (DIP)
+	High-level modules should not depend on low-level modules. Both should depend on abstractions. Abstractions should not depend on details; details should depend on abstractions.
+
+	**Example:**
+	```java
+	// Not following DIP
+	class LightBulb {
+	    void turnOn() {
+	        // Implementation
+	    }
+	}
+
+	class Switch {
+	    LightBulb bulb;
+
+	    Switch(LightBulb bulb) {
+	        this.bulb = bulb;
+	    }
+
+	    void operate() {
+	        bulb.turnOn();
+	    }
+	}
+
+	// Following DIP
+	interface Switchable {
+	    void turnOn();
+	}
+
+	class LightBulb implements Switchable {
+	    public void turnOn() {
+	        // Implementation
+	    }
+	}
+
+	class Switch {
+	    Switchable device;
+
+	    Switch(Switchable device) {
+	        this.device = device;
+	    }
+
+	    void operate() {
+	        device.turnOn();
+	    }
+	}
+	```
+
+These examples provide a basic understanding of SOLID principles in Java. Applying these principles leads to cleaner, more maintainable, and flexible software designs.
+
+
+
+
+Java OOPS:
+	Inheritance:
+	Abstraction:
+	Polymorphism:
+	Encapsulation:
+
+
+CAP Theorem:
+
+What is Elastic Search:
+	1. It is a search engine used for full text search, log analytics, security Intelligence, Business Analytics, Operational Intelligence
+	2. Apache Lucene Library
+	3. [Search engine, analytics database, index, like google] - distributed nosql db in the form of json documents
+	4. ELK -
+		E- Elasticsearch
+		L - logStash
+		K - Kibana
+	5.logStash -> Elastic Search -> Kibana
+
+
+MongoDB vs SQL:
+	1. The Mongodb is an unstructured database which stores json documents
+	2. MongoDB is most used in case of horizontal scaling systems where the data fields are changing as time passes.
+	3. MongoDB has json text type of querying language
+	4. 
+CI-CD Pipeline we use:
+1. We use the argo
+
+
+ONE-LEAD project
+1. Need to know the authentication mechanism we use here
+	Here we handle authentication mechanism using internal system called gringotts which provides us a iframe showing user to login with google id, once he logged internally the token id will be given us as the response of google and there will be a token id which will be generated so we will send access Token and tokenId to our system by gringotts.
+
+	This is how we verify the user, and the access Token will be used to restrict the user to access the crm based on their role.
+2. Need to prepare statement if they ask about the technical design
+	
+
+
+
+LLD Topics examples:
+
+1. Parking lot
+2. Snakes and Ladders
+3. Book my show
+4. ATM
+5. Elevator Systems
+6. Vending Machines
+7. Hotel management
+8. Car pooling
+9. Car rental
+10. Designing
+

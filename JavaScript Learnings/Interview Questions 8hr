@@ -1,0 +1,188 @@
+1. What is Shadowing
+2. What is Closure
+3. What is
+
+
+
+21/12
+
+	1. What is debouncing?
+	In JavaScript, "debouncing" is a technique used to improve performance by ensuring that a function doesn't execute too frequently or in rapid succession, especially during events that can be triggered many times over a short period, such as window resizing or keyboard inputs.
+
+		function debounce(func, delay) {
+		    let timerId;
+		    return function(...args) {
+		        if (timerId) {
+		            clearTimeout(timerId);
+		        }
+		        timerId = setTimeout(() => {
+		            func.apply(this, args);
+		        }, delay);
+		    };
+		}
+
+		// Example usage:
+		const searchInput = document.querySelector('#searchInput');
+
+		function fetchData(query) {
+		    console.log(`Fetching data for query: ${query}`);
+		    // Here, you would typically make an API call or perform some action.
+		}
+
+		// Debounce the fetchData function to prevent rapid calls during typing.
+		const debouncedFetchData = debounce(fetchData, 300); // 300ms delay
+
+		searchInput.addEventListener('keyup', function(event) {
+		    debouncedFetchData(event.target.value);
+		});
+
+	Example usage of debouncing is when we are typing in google search the suggestions comes after some time
+
+	2. What is throttling?
+		Throttling is similar to Debouncing except that the function runs at the latest the time out when the function was called
+
+	3.Both throttling and debouncing are techniques used to manage how often a function is invoked, especially in response to rapid-fire events like scrolling, window resizing, or keyboard input. While they serve similar purposes, they operate differently and are suited for different scenarios.
+
+		1. Throttling:
+
+		Throttling ensures that the function is not executed more than once in a given time frame, regardless of how many times the event fires.
+
+		**How it works**:
+		- Once the function is invoked, it will run immediately.
+		- After running the function, the throttle sets a "cooldown period" during which subsequent calls to the function will be ignored.
+		- After the cooldown period has passed, the function is allowed to be executed again.
+
+		**Example**: If you set a throttle of 200 milliseconds on a scroll event and the user scrolls 10 times within a second, the throttling mechanism ensures that the scroll function is executed only once every 200 milliseconds, regardless of the number of times the event fired.
+
+		2. Debouncing:
+
+		 Debouncing ensures that the function is not invoked until a certain amount of time has passed since the last time the function was called.
+
+		**How it works**:
+		- When the event is triggered, the function is not executed immediately.
+		- Instead, the function waits for a specified delay period.
+		- If another event occurs within this delay period, the original function call is cancelled, and the timer restarts.
+		- Only when the delay period has passed without any new events is the function finally executed.
+
+		**Example**: If you set a debounce of 300 milliseconds on a keypress event, and the user types rapidly, the debounce mechanism ensures that the function associated with the keypress is only executed after the user has stopped typing for at least 300 milliseconds.
+
+		### Key Differences:
+
+		1. **Execution Timing**:
+		   - **Throttling**: Ensures that the function doesn't run more often than once every specified interval.
+		   - **Debouncing**: Ensures that the function doesn't run until a certain amount of time has passed without the event reoccurring.
+
+		2. **Triggered Events**:
+		   - **Throttling**: All events during the cooldown period are ignored.
+		   - **Debouncing**: The function is only executed once after the specified delay, regardless of how many times the event occurred during that period.
+
+		3. **Use Cases**:
+		   - **Throttling**: Useful for events where you want to ensure the function doesn't execute too frequently, such as handling rapid scrolling or dragging.
+		   - **Debouncing**: Useful for events where you want to wait until the user has stopped performing an action, such as waiting until the user has finished typing before executing a search.
+
+		In summary, while both throttling and debouncing control the frequency of function execution, throttling focuses on limiting the rate of execution, while debouncing focuses on delaying execution until the event has been quiet for a certain duration.
+
+
+	4. Generators and iterables
+
+		1. What is symbol?
+		2. What is iterator and iterable
+			1. Array is iterable
+			2. arr = [1,24,5];
+			3. it = arr[Symbol.iterator]()
+			4. it.next()
+			5. let range = {
+				start :0,
+				end:5,
+				[Symbol.iterator](){
+					let that = this;
+					let i =this.start;
+					return {
+						next: function(){
+						return {value: i, done: i++>that.end}
+						}
+
+					}
+				}
+
+			}
+
+	5. Arrow function vs Functions
+	6. Array type vs Iterables
+		1. Iterable objects are like Symbol.iterator method as defined above
+		2. Arraylike objects works on indexes and the array lenght
+
+		3. How to convert ArrayLike to Array
+			1. We can use Array.from(arrayLike)
+			2. Set, Map is an ArrayLike we can use above method to convert it to array
+	7. Map gives different functions etc
+
+		1. COnvert Object to Map
+			map = new Map(Object.entries())
+		2. Convert Map to Object
+			map = Object.fromEntries(map.entries())
+		3. Doubt: Set, Map are iterables or Arraylike? ans: Iterables
+	8. Set and its functions
+
+
+	9. WeakSet and weakmap
+
+	10. Generators:
+		1. Used for making iterators and iterables easy
+		2. two parts:
+			1. generator function
+			2, generator yield
+
+		3. generator is iterable too we can use spread operator
+
+		4. Iterator vs iterables?
+			Both iterators and iterables are fundamental concepts in JavaScript's approach to data collections and loops, but they serve distinct roles. Let's break down their differences:
+
+			### Iterable:
+
+			1. **Definition**: An iterable is any object that defines its iteration behavior. Specifically, it must have a method, usually `[Symbol.iterator]()`, that returns an iterator.
+			  
+			2. **Characteristics**:
+			   - An iterable can produce an iterator.
+			   - Examples of built-in iterables include arrays, strings, maps, sets, and generator functions.
+
+			3. **Use in `for...of`**: Iterable objects can be used in a `for...of` loop. When you use a `for...of` loop on an iterable, it implicitly calls the `[Symbol.iterator]()` method to get an iterator and then uses that iterator to loop over the values.
+
+			   ```javascript
+			   const array = [1, 2, 3];
+			   for (const value of array) {
+			     console.log(value); // Outputs: 1, 2, 3
+			   }
+			   ```
+
+			### Iterator:
+
+			1. **Definition**: An iterator is an object that provides a standardized way to access the elements of a collection (or sequence of data) one at a time, keeping track of its current position within that sequence.
+
+			2. **Characteristics**:
+			   - An iterator must have a `next()` method.
+			   - The `next()` method returns an object with two properties: `value` (the next value in the sequence) and `done` (a boolean indicating whether the iterator has reached the end of the sequence).
+
+			3. **Use with Iterables**: While not all iterators are directly iterable (because they don't necessarily have a `[Symbol.iterator]()` method), all iterables can produce iterators. When you call the `[Symbol.iterator]()` method on an iterable, it returns an iterator for that iterable.
+
+			   ```javascript
+			   const arrayIterator = [1, 2, 3][Symbol.iterator]();
+			   console.log(arrayIterator.next()); // { value: 1, done: false }
+			   ```
+
+			### Summary:
+
+			- **Iterable**: Defines how to produce an iterator. An object that can be looped over using `for...of`.
+			  
+			- **Iterator**: Provides a way to access elements of a collection one at a time. Returns values sequentially and indicates when the sequence has ended.
+
+			In essence, while iterables are about producing iterators for loop consumption, iterators are about providing a mechanism to sequentially access values from a collection.
+		5. Iterator has next function whereas iterable need to be called it[Symbol.iterator]() this will have next function
+
+		6. Using generators to build a range
+
+		7. We can build multiRange using the generator of generators
+
+	11. protoTypical Inheritance:
+			1. ProtoTypes
+

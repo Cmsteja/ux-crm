@@ -1,0 +1,39 @@
+1. Need to look into the DP logics - [Done]
+2. Need to look into LIS [Done]
+3. Need to look into Merge Sort, Kadanes algorithm [Done]
+4. Need to go through the sheet of strivers and look back to the revision there
+
+
+LIS:
+
+Design:
+So the idea is to find the longest subsequence which is increasing
+
+[a1,a2,a3,a4,a5] -> in this we have 
+
+
+if(n==0){
+	return 0;
+}
+// if the prev is less than current 
+	1. Include 
+	2. Not inclue
+
+//else
+	1. Not Include
+[2,4,12,4,3,1]
+
+[2,4,13] - 3
+
+
+int solve(int [] nums,int prev, int n){
+	if(n==0){
+		return 0;
+	}
+	if(nums[n-1]>=prev){
+		return max(solve(nums,nums[n-1],n-1)+1, solve(nums,prev,n-1));
+	}else{
+		return solve(nums,prev,n-1)
+	}
+	
+}

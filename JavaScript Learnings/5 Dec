@@ -1,0 +1,11 @@
+To Do:
+1. Need to migrate the activityTypes along with render Types
+2. Need to create the mappings for the fields of activity Types in Snowflake to the mongodb schema and trigger an api.
+3. Need to run the script to push the activityTypes to mongo in local.
+
+
+Edge Cases in Activity Migration:
+1. If the prospectId of the activities are not present
+2. If the mandatory fields are not being passed.
+3. If the field schema is failing
+4. Need to tackle if the field schema for non mandatory fields is incorrect
